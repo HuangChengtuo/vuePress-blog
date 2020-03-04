@@ -1,16 +1,21 @@
 module.exports = {
   base: '/vuePress-blog/',
-  title: '黄诚拓',
+  title: '黄秤砣',
   description: '基于vuePress搭建的个人网站',
   themeConfig: {
     nav: [
-      {text: '首页', link: '/'},
-      {text: '个人简历', link: 'CV'},
-      {text: 'GitHub', link: 'https://github.com/HuangChengtuo'}
+      { text: '首页', link: '/' },
+      { text: '笔记', link: '/note/basic.md' },
+      { text: '个人简历', link: '/CV.md' },
+      { text: 'GitHub', link: 'https://github.com/HuangChengtuo' }
     ],
-    sidebar: [
-      'CV'
-    ],
-    sidebarDepth: 2
+    logo: 'pureDD.png',
+    displayAllHeaders: true,
+    sidebar: {
+      '/note/': ['basic', 'browser', 'js', 'css'],
+      '/': ['/CV']
+    },
+    sidebarDepth: 2,
+    smoothScroll: true
   }
 }

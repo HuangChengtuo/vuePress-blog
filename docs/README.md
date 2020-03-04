@@ -1,14 +1,9 @@
 ---
-
 home: true
 heroImage: /DD.png
-actionText: 个人简历
-actionLink: /CV
-features:
-
+heroText: 黄秤砣的个人网站
+tagline: 基于 vuePress 搭建
+actionText: 进入笔记 →
+actionLink: /note/basic.md
 footer: MIT Licensed
 ---
-<demo/>
-
-
-
