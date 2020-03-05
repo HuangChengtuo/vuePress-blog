@@ -7,17 +7,22 @@
 通过 script 标签提供一个回调函数从地址获取数据，只限于 get 请求。
 ```js
 <script src="http://www.api.com/login?id=114514&callback=action"></script>
+<script>
+  const action = (res) => {
+  // 处理数据
+}
+</script>
 ```
 
 ### CORS
-服务端设置 Access-Control-Allow-Origin 字段允许跨域
+服务端设置 Access-Control-Allow-Origin 字段允许跨域  
 携带 cookie 需要 withCredentials 字段
 
 ### 简单请求
-请求方法是以下三种方法
+请求方法满足是以下三种方法，
 * HEAD
 * GET
-* POST 
+* POST
 
 Content-Type 的值仅限于下列三者
 * text/plain
@@ -52,7 +57,7 @@ Expires: 缓存过期时间
 Last-modified: 服务器端文件的最后修改时间  
 Etag: hash字符串，标识资源的状态，由服务端产生
 
-[浏览器缓存](https://segmentfault.com/a/1190000008377508)
+[浏览器缓存 - Javascript 编程基础 - SegmentFault 思否](https://segmentfault.com/a/1190000008377508)
 
 
 

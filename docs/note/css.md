@@ -33,4 +33,4 @@
 避免 margin 坍缩  
 清除浮动，防止父元素高度坍缩  
 不会与其他 float 重叠，（BFC 内部仍会重叠）  
-[学习 BFC - 考拉海购前端团队](https://juejin.im/post/59b73d5bf265da064618731d)
+[学习 BFC (Block Formatting Context) - 掘金](https://juejin.im/post/59b73d5bf265da064618731d)
