@@ -25,7 +25,7 @@ export default {
     font-size: 1.2rem;
     color: white;
     background: #3eaf7c;
-    margin 0 1rem
+    margin 0 1rem 1rem 1rem
     padding: 0.8rem 1.6rem;
     border-radius: 4px;
     box-sizing: border-box;
