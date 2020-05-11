@@ -10,8 +10,8 @@
 
 ## 技能
 
-* 熟练使用 Vue 全家桶，了解 Vue 部分原理
-* 了解 React ，以及其他框架
+* 熟悉 Vue，熟练使用 Vue 全家桶，了解 Vue 基本原理
+* 熟悉 React、Hook、React Router、Redux
 * 熟悉 ES6 以及之后的新标准新特性
 * 熟练使用 CSS 以及 Sass 等预处理器进行页面布局
 * 了解浏览器基本原理
