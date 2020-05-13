@@ -7,11 +7,13 @@
 * 黄诚拓，2020 届本科，男，1997. 10
 * 手机：18958817571
 * 邮箱：564117373@qq.com
+* [PDF下载](https://huangchengtuo.github.io/vuePress-blog/黄诚拓前端简历.pdf)
 
 ## 技能
 
 * 熟悉 Vue，熟练使用 Vue 全家桶，了解 Vue 基本原理
-* 熟悉 React、Hook、React Router、Redux
+* 了解 React、Hook、React Router、Redux，熟练使用 React 全家桶
+* 了解微信小程序，了解 mpvue 开发小程序
 * 熟悉 ES6 以及之后的新标准新特性
 * 熟练使用 CSS 以及 Sass 等预处理器进行页面布局
 * 了解浏览器基本原理
