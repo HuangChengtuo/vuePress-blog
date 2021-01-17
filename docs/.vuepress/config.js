@@ -1,5 +1,4 @@
 module.exports = {
-  base: '/vuePress-blog/',
   title: '黄秤砣',
   description: '基于vuePress搭建的个人网站',
   themeConfig: {
