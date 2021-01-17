@@ -12,7 +12,7 @@
 ## 技能
 
 * 熟悉 Vue，熟练使用 Vue 全家桶，了解 Vue 基本原理
-* 了解 React、Hook、React Router、Redux，熟练使用 React 全家桶
+* 熟练使用 React 全家桶，了解 Hook，了解 Mobx、Redux
 * 了解微信小程序，了解 mpvue 开发小程序
 * 熟悉 ES6 以及之后的新标准新特性
 * 熟练使用 CSS 以及 Sass 等预处理器进行页面布局
