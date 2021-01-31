@@ -1,19 +1,9 @@
-<template>
+<template functional>
   <p id="custom-action">
-    <a class="nav-link action-button" @click="jump('note/basic')">进入笔记</a>
-    <a class="nav-link action-button" @click="jump('CV')">我的简历 →</a>
+    <a href="https://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
+    <router-link to="/note/basic.html" class="nav-link action-button">进入笔记 →</router-link>
   </p>
 </template>
-
-<script>
-export default {
-  methods: {
-    jump(text) {
-      this.$router.push({ path: `/${text}.html` })
-    }
-  }
-}
-</script>
 
 <style lang="stylus">
 #custom-action {
