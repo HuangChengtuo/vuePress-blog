@@ -1,4 +1,4 @@
-<template functional>
+<template>
   <p id="custom-action">
     <a href="https://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
     <router-link to="/note/basic.html" class="nav-link action-button">进入笔记 →</router-link>
