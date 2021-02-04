@@ -12,7 +12,7 @@ module.exports = {
     displayAllHeaders: true,
     sidebar: {
       '/note/': ['basic', 'browser', 'js', 'css'],
-      '/': ['/CV']
+      '/CV/': ['/CV']
     },
     sidebarDepth: 2,
     smoothScroll: true
