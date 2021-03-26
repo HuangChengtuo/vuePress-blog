@@ -8,11 +8,11 @@ module.exports = {
       { text: '个人简历', link: '/CV.md' },
       { text: 'GitHub', link: 'https://github.com/HuangChengtuo' }
     ],
-    logo: 'pureDD.png',
+    logo: 'https://s1.huangchengtuo.com/img/pureDD.png',
     displayAllHeaders: true,
     sidebar: {
       '/note/': ['basic', 'browser', 'js', 'css'],
-      '/': ['/CV']
+      '/CV/': ['/CV']
     },
     sidebarDepth: 2,
     smoothScroll: true
