@@ -7,7 +7,7 @@
 * 黄诚拓，2020 届本科，男，1997. 10
 * 手机：18958817571
 * 邮箱：564117373@qq.com
-* [PDF下载](https://huangchengtuo.github.io/vuePress-blog/黄诚拓前端简历.pdf)
+* [PDF下载](https://s1.huangchengtuo.com/pdf/黄诚拓前端简历.pdf)
 
 ## 技能
 

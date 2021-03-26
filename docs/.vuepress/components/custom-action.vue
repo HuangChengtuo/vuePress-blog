@@ -1,9 +1,24 @@
-<template functional>
+<template>
   <p id="custom-action">
     <a href="https://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
     <router-link to="/note/basic.html" class="nav-link action-button">进入笔记 →</router-link>
   </p>
 </template>
+
+<script>
+export default {
+  mounted() {
+    // 提前激活容器
+    fetch('https://www.huangchengtuo.com').then(res => {
+      console.log(res)
+    }).catch(err => {
+      console.log(err)
+      console.log(JSON.stringify(err))
+    })
+  }
+}
+</script>
+
 
 <style lang="stylus">
 #custom-action {
@@ -15,14 +30,14 @@
     font-size: 1.2rem;
     color: white;
     background: #3eaf7c;
-    margin 0 1rem 1rem 1rem
+    margin: 0 1rem 1rem 1rem;
     padding: 0.8rem 1.6rem;
     border-radius: 4px;
     box-sizing: border-box;
     border-bottom: 1px solid #389d70;
 
     &:hover {
-      cursor pointer
+      cursor: pointer;
       background: #4abf8a;
     }
   }
