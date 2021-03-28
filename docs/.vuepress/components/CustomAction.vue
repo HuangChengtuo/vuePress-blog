@@ -1,20 +1,15 @@
 <template>
   <p id="custom-action">
     <a href="https://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
-    <router-link to="/note/basic.html" class="nav-link action-button">进入笔记 →</router-link>
+    <router-link to="/resume" class="nav-link action-button">进入简历 →</router-link>
   </p>
 </template>
 
 <script>
 export default {
   mounted() {
-    // 提前激活容器
-    fetch('https://www.huangchengtuo.com').then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log(err)
-      console.log(JSON.stringify(err))
-    })
+    // 提前激活腾讯云 serverless
+    fetch('https://www.huangchengtuo.com')
   }
 }
 </script>
