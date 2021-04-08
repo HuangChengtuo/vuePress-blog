@@ -12,7 +12,7 @@
 
 ## 技能
 
-* 熟练使用 Nuxt 进行服务端预渲染，了解 Vue 基本原理
+* 熟练使用 Nuxt 进行服务端渲染，了解 Vue 3 及其基本原理
 * 熟练使用 React 全家桶，熟悉 React、 Hook
 * 熟悉 TypeScript、ESNext 的各种新标准新特性以及浏览器基本原理
 * 熟练使用 Node.js、Docker 进行前端线上部署、mock 接口
