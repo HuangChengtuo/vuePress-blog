@@ -34,3 +34,40 @@
 清除浮动，防止父元素高度坍缩  
 不会与其他 float 重叠，（BFC 内部仍会重叠）  
 [学习 BFC (Block Formatting Context) - 掘金](https://juejin.im/post/59b73d5bf265da064618731d)
+
+
+## 居中
+```css
+text-align: center;
+line-height: 100%;
+
+margin: 0 auto;
+vertical-align: middle;
+
+display: block;
+justify-content: center;
+align-items: center;
+
+posistion...
+
+```
+
+## sass mixin
+```scss
+@mixin large-text {
+  font: {
+    family: Arial;
+    size: 20px;
+    weight: bold;
+  }
+  color: #ff0000;
+}
+```
+```scss
+.page-title {
+  @include large-text;
+  padding: 4px;
+  margin-top: 10px;
+}
+```
+

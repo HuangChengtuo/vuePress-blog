@@ -1,5 +1,5 @@
 module.exports = {
-  title: '黄秤砣',
+  title: '黄秤砣的博客',
   description: '基于vuePress搭建的个人网站',
   themeConfig: {
     nav: [
@@ -16,7 +16,7 @@ module.exports = {
       '/resume/': ['/resume'],
       '/article/': ['anime']
     },
-    sidebarDepth: 2,
+    sidebarDepth: 1,
     smoothScroll: true
   }
 }

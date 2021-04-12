@@ -1,5 +1,12 @@
 # js
+
+## 类型
+### 基本类型
+`number`，`string`，`boolean`，`BigInt`，`Symbol`，`null`，`undefined`
+
 ## 继承
+prototype 的继承就是 js 的糟粕，能用 class 就用 class
+
 ### class 继承
 ```js
 class Parent {
