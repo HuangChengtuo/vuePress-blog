@@ -49,10 +49,12 @@ js引擎是单线程的，只有一个 FILO 的执行栈。
 ![缓存](/cache.png)
 
 **强缓存**  
-命中则直接从本地获取缓存，不向服务端请求
+命中则直接从本地获取缓存，不向服务端请求  
+`200 OK (from memory cache)`
 
 **协商缓存**  
-没有命中（如过期）则向服务器请求，若服务端未更新则重定向至本地缓存
+没有命中（如过期）则向服务器请求，若服务端未更新则重定向至本地缓存  
+`304 Not Modified`
 
 **header 字段**  
 Cache-Control: max-age/s-maxage/public/private/no-cache/no-store/must-revalidate  
