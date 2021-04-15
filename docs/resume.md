@@ -12,7 +12,7 @@
 
 ## 技能
 
-* 熟练使用 Nuxt 进行服务端渲染，了解 Vue 3 及其基本原理
+* 熟练使用 Nuxt 进行服务端渲染，手写过简单 Vue 3
 * 熟练使用 React 全家桶，熟悉 React、 Hook
 * 熟悉 TypeScript、ESNext 的各种新标准新特性以及浏览器基本原理
 * 熟练使用 Node.js、Docker 进行前端线上部署、mock 接口
@@ -46,8 +46,14 @@
 
 ## 项目
 
+**simple-vue**  
+手写简单 Vue3 [GitHub](https://github.com/HuangChengtuo/simlpe-vue) [Gitee](https://gitee.com/HuangChengtuo/simple-vue)
+
+**leet-code**  
+每日一题 [Gitee](https://gitee.com/HuangChengtuo/leet-code)
+
 **个人网站**  
-基于 Nuxt、TypeScript 搭建的 [个人网站](https://www.huangchengtuo.com)  
+基于 Nuxt、TypeScript 搭建的 [个人网站](https://www.huangchengtuo.com)
 
 **个人博客**  
 基于 VuePress 搭建的 [个人博客](/)
