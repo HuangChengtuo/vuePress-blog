@@ -41,12 +41,12 @@ js引擎是单线程的，只有一个 FILO 的执行栈。
 队列中微任务，再执行 task 队列中宏任务队列。  
 宏任务执行结束后会对页面重新渲染  
 微任务会在一个宏任务执行结束，下一个宏任务执行前执行
-![事件循环](/eventLoop.png)
+![事件循环](https://s1.huangchengtuo.com/img/0416eventLoop.png)
 
 ## 缓存
 页面的缓存状态由 header 决定，根据 header 确定是否命中
 
-![缓存](/cache.png)
+![缓存](https://s1.huangchengtuo.com/img/0416cache.png)
 
 **强缓存**  
 命中则直接从本地获取缓存，不向服务端请求  

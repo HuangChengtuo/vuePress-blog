@@ -85,14 +85,14 @@ const throttle = (fn, wait = 500) => {
 
 ## diff
 diff 算法会逐层进行比较，但只会同层级之间比较，为了性能，当同层级节点不同就直接替换，不会继续比较子节点，无论子节点是否相同  
-![vdom](/vdom.png)
+![vdom](https://s1.huangchengtuo.com/img/0416vdom.png)
 ### patch
-![patch](/patch.png)
+![patch](https://s1.huangchengtuo.com/img/0416patch.png)
 1. 当数据发生改变时，set 方法会让调用 Dep.notify 通知所有订阅者 Watcher，订阅者就会调用 patch 给真实的 DOM 打补丁，更新相应的视图。
 2. patch 接收新旧节点判断是否需要两个节点是否一样，一样就调用 patchVnode 比较子节点，不一样就完全替换旧节点
 3. patchVnode 前三种情况都直接进行 patch，都有子节点则进行 diff
 ### diff算法
-![diff](/diff.png)    
+![diff](https://s1.huangchengtuo.com/img/0416diff.png)    
 分别对 oldS、oldE、newS、newE 两两比较
 * 新旧 S 和 E 自行比较，相同则指针往中间移动
 * oldS 与 newE 相同，则 oldS 移至 oldE 后面

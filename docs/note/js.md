@@ -94,7 +94,7 @@ Child.prototype.constructor = Child
 ```
 
 ## 事件捕获冒泡
-![捕获冒泡](/捕获冒泡.png)
+![捕获冒泡](https://s1.huangchengtuo.com/img/0416捕获冒泡.png)
 peventDefault
 阻止默认事件，如超链接
 stopPropagation 
