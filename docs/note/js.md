@@ -94,8 +94,16 @@ Child.prototype.constructor = Child
 ```
 
 ## 事件捕获冒泡
-![捕获冒泡](https://s1.huangchengtuo.com/img/0416捕获冒泡.png)
+![捕获冒泡](https://s1.huangchengtuo.com/img/0416捕获冒泡.png)  
+
 peventDefault
 阻止默认事件，如超链接
 stopPropagation 
 阻止冒泡
+
+## new 对象的过程
+
+* 创建一个空对象  
+* 让空对象的 _proto_ 指向构造函数的 prototype  
+* 执行构造函数中的代码（为这个新对象添加属性）  
+* 返回新对象  
