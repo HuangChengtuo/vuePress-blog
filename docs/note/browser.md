@@ -107,6 +107,13 @@ Etag: hash字符串，标识资源的状态，由服务端产生
 
 [浏览器缓存 - Javascript 编程基础 - SegmentFault 思否](https://segmentfault.com/a/1190000008377508)
 
+## 事件捕获冒泡
+
+![捕获冒泡](https://s1.huangchengtuo.com/img/0416捕获冒泡.png)
+
+peventDefault 阻止默认事件，如超链接  
+stopPropagation 阻止冒泡
+
 ## Event 的 target currentTarget
 
 target：点击的元素  
