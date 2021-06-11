@@ -1,4 +1,5 @@
 module.exports = {
+  port: 2222,
   title: '黄秤砣的博客',
   description: '基于vuePress搭建的个人网站',
   themeConfig: {
