@@ -33,3 +33,29 @@ type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | und
 ```
 
 `JSX.Element`就是通过继承`React.ReactNode`实现的，没有任何区别
+
+## AntD 的 Event TypeScript 类型
+
+我用到最多的应该就是 `e.target.value` 这个值，TypeScript 一大作用就是为了提供精准的代码提示，在5次敲击内输入完整的代码
+
+当方法内联于 antd 元素中，Event 能够得到良好的代码提示
+![内联方法](https://s1.huangchengtuo.com/img/210615inline.gif)
+
+但当通过引用的方式来传入方法，不对方法的形参进行正确的类型标记,就会隐式的变为 any 类型，失去原有的 ts 提示
+
+```tsx
+// e implicitly has any type
+const onChange = e => {
+  console.log(e?.target?.value)
+}
+// ...
+<Input onChange={onChange} />
+```
+
+这时就需要手动对方法形参的类型进行标注
+
+* `Input.onChange(e: ChangeEvent<HTMLInputElement>)`
+* `Radio.Group.onChange(e: RadioChangeEvent)`
+* `Checkbox.onChange(e: CheckboxChangeEvent)`
+
+
