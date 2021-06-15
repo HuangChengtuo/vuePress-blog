@@ -5,15 +5,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  mounted() {
-    // 提前激活腾讯云 serverless
-    fetch('https://www.huangchengtuo.com')
-  }
-}
-</script>
-
 <style scoped>
 .qrcode {
   width: 8rem;
