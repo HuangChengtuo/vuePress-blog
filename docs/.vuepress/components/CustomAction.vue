@@ -1,19 +1,9 @@
 <template>
   <p id="custom-action">
-    <a href="https://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
+    <a href="http://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
     <router-link to="/resume" class="nav-link action-button">进入简历 →</router-link>
   </p>
 </template>
-
-<script>
-export default {
-  mounted() {
-    // 提前激活腾讯云 serverless
-    fetch('https://www.huangchengtuo.com')
-  }
-}
-</script>
-
 
 <style lang="stylus">
 #custom-action {
