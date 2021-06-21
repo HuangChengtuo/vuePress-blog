@@ -34,7 +34,7 @@ type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | und
 
 `JSX.Element`就是通过继承`React.ReactNode`实现的，没有任何区别
 
-## AntD 的 Event TypeScript 类型
+## AntD 的 Event 的 ts 类型
 
 TypeScript 一大作用就是为了提供精准的代码提示
 
@@ -56,9 +56,9 @@ const onChange = e => {
 
 这时就需要手动对方法的形参的类型进行标注
 
-* `Input.onChange(e: ChangeEvent<HTMLInputElement>)`
-* `Radio.Group.onChange(e: RadioChangeEvent)`
-* `Checkbox.onChange(e: CheckboxChangeEvent)`
+* `Input.onChange(e: React.ChangeEvent<HTMLInputElement>)`
+* `Radio.Group.onChange(e: antd.RadioChangeEvent)`
+* `Checkbox.onChange(e: antd.CheckboxChangeEvent)`
 * `Button.onClick(e: React.MouseEvent)`
 * `Select.onChange(value: string, option:Option)`
 
