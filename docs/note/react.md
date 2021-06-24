@@ -105,6 +105,17 @@ useHistory 提供的方法，基本与 class 一致
 使用`withRouter`对组件进行包裹，生成一个高阶组件，在原组件的 props 里添加相应的路由属性与方法
 
 ```tsx
+// index.d.ts
+export interface RouteComponentProps<Params extends { [K in keyof Params]?: string } = {},
+  C extends StaticContext = StaticContext,
+  S = H.LocationState> {
+  history: H.History<S>;
+  location: H.Location<S>;
+  match: match<Params>;
+  staticContext?: C;
+}
+
+// playground.tsx
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 interface Props extends RouteComponentProps {
@@ -126,3 +137,28 @@ class Temp extends React.Component<Props> {
 const BlockA = withRouter(Temp)
 export default BlockA
 ```
+
+## React Router v3 与 v4+ 区别
+
+在 v4 以及之后的版本，router 被拆分出多个包，以对应浏览器和 app 的不同环境，且 api 变化巨大
+
+* react-router
+* react-router-dom
+* react-router-native
+
+在 v3 可以直接引入`hashHistory`或者`browserHistory`进行路由跳转，之后版本需要通过 hook 或者 HOC 进行路由参数的传递
+
+```jsx
+// v3.x
+import {hashHistory} from 'react-router'
+
+hashHistory.push('/')
+```
+
+在 v3.x 中，只会对第一个匹配成功的 Route 进行渲染
+
+v4+ 对于没有包裹在 Switch 中的 Route 只要匹配上了就会进行渲染  
+所以 v4+ 新增了 Switch 标签，与 switch 语句类似，只会渲染 Switch 标签内第一个匹配的 Route 标签  
+像`<Route path="/*" component={NotFund} />`这种404页面就必需包裹在 Switch 中
+
+[React Router v4 几乎误我一生 - 知乎](https://zhuanlan.zhihu.com/p/27433116)
