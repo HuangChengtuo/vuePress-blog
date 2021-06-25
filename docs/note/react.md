@@ -2,7 +2,7 @@
 
 ## JSX.Element 与 React.ReactNode 与 React.ReactElement
 
-jsx 文件就是有关`React.createElement()`的一个语法糖。
+jsx 文件就是实现`React.createElement()`的一个语法糖。
 `React.createElement`方法会根据传入`type`的类型来区分返回普通的`HTMLElement`或者是`React.ReactElement`实例
 
 `React.ReactElement`在使用上就是一个含有`type`、`props`、`key`的实例对象，由 React 最终渲染成真实的 DOM 元素
@@ -78,7 +78,7 @@ React Router 从 v5.1.0 开始，新增了对 Hooks 的支持，并陆续添加�
 * `useRouteMatch`
 
 ```jsx
-import {useHistory, useLocation, useParams} from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 
 export default function Playground() {
   const router = useHistory()
@@ -123,7 +123,7 @@ interface Props extends RouteComponentProps {
   // ...
 }
 
-class Temp extends React.Component<Props> {
+class BlockA extends React.Component<Props> {
   constructor (props: Props) {
     super(props)
     console.log(props)
@@ -134,8 +134,8 @@ class Temp extends React.Component<Props> {
   }
 }
 
-const BlockA = withRouter(Temp)
-export default BlockA
+const WithRouterBlockA = withRouter(BlockA)
+export default WithRouterBlockA
 ```
 
 ## React Router v3 与 v4+ 区别
@@ -150,7 +150,7 @@ export default BlockA
 
 ```jsx
 // v3.x
-import {hashHistory} from 'react-router'
+import { hashHistory } from 'react-router'
 
 hashHistory.push('/')
 ```

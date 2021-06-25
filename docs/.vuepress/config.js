@@ -13,7 +13,7 @@ module.exports = {
     logo: 'https://s1.huangchengtuo.com/img/pureDD.png',
     displayAllHeaders: true,
     sidebar: {
-      '/note/': ['basic', 'browser', 'css', 'js', 'react', 'ts'],
+      '/note/': ['basic', 'browser', 'css', 'js', 'react', 'redux', 'ts'],
       '/resume/': ['/resume'],
       '/article/': ['anime']
     },
