@@ -24,8 +24,28 @@ Redux 和 Vuex 都是为了当多个组件共享状态时，仍能够保持单�
 **Redux** 的核心概念
 
 * state：一个应用中只有一个 store 实例
-* action：一个用来描述 state 变化的 event（*其实就是个普通的 js 对象*）
-* reducer：改变 state 的唯一方法，且唯一，必须为纯函数，根据 action 的描述，返回一个新的 state
+* action：一个用来描述 state 变化的 event（*其实就是个普通的 js对象*）
+* reducer：改变 state 的唯一方法，且唯一，必须为纯函数，判断 action 对应的字段，返回一个新的 state
 
-对于 vuer 来说，redux 就是只有一个 <ruby>mutation<rt>reducer</rt></ruby> ，往 <ruby>mutation<rt>reducer</rt></ruby> 里传入 mutation 的 vuex  
-对于 reacter 来说，vuex 就是有多个<ruby>reducer<rt>mutation</rt></ruby>，每个 <ruby>reducer<rt>mutation</rt></ruby> 都包含了各自 action 的 redux
+对于 vuer 来说，redux 就是只有一个 <ruby>mutation<rt>reducer</rt></ruby> ，往 <ruby>mutation<rt>reducer</rt></ruby> 里传入 mutation 的 vuex
+
+对于 reacter 来说，vuex 就是有多个<ruby>reducer<rt>mutation</rt></ruby>，每个 <ruby>reducer<rt>mutation</rt></ruby> 都是已经包含了对应 action 的 redux
+
+### 视图层使用的比较
+
+```vue
+<template>
+  <img :src="$store.state.avatar" alt="avatar">
+  {{$store.state.user.name}}
+</template>
+
+<script>
+export default {
+  methods: {
+    login() {
+      this.$store.commit('login')
+    }
+  }
+}
+</script>
+```
