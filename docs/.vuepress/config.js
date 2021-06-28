@@ -1,7 +1,8 @@
 module.exports = {
   port: 2222,
   title: '黄秤砣的博客',
-  description: '基于vuePress搭建的个人网站',
+  description: '基于vuePress搭建的个人博客',
+  head: [['link', { rel: 'icon', href: '/logo.png' }]],
   themeConfig: {
     nav: [
       { text: '首页', link: 'http://www.huangchengtuo.com' },
