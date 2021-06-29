@@ -56,7 +56,7 @@ export default {
       this.$store.commit('changeCount', this.$store.state.count + 666)
     },
     reset() {
-      this.$store.dispatch('resetCount').then(res => {
+      this.$store.dispatch('resetCount').then(() => {
         // ...
       })
     }
@@ -132,3 +132,102 @@ export default connect((state: State) => {
   return { count: state.count }
 })(ReduxB)
 ```
+
+react 在视图层中的使用，主要是通过 connect 包裹或者 hooks 来传递具体的 state 值  
+修改 state 需要通过往 dispatch 中传入相应的 action，通知 reducer 对 state 做具体的修改
+
+### 简单总结
+
+vuex 和 redux 在视图层的使用，都是简单的获取 state，通过 commit 和 dispatch 通知 store 做出相应的动作
+
+vuex 通过全局插件的形式，注入到 vue 的根实例中，使得 store 能在所有组件的 this 中获取到  
+redux 则是需要通过现在需要使用状态管理的顶层上包裹一层 Provider 标签，再在各个组件中单独引入获取 store 的方法
+
+## 建立 store 方式的比较
+
+### Vuex
+
+```js
+import { createStore } from 'vuex'
+
+const store = createStore({
+  state: {
+    color: 'red',
+    count: 1,
+    theme: 'light'
+  },
+  mutations: {
+    changeCount(state, count) {
+      state.count = count
+    },
+    changeTheme(state, theme) {
+      state.theme = theme
+    }
+  },
+  actions: {
+    changeTheme({ commit, state }, id) {
+      api.getTheme(id).then(res => {
+        commit('changeTheme', res)
+      })
+    }
+  }
+})
+```
+
+vuex 的初始化比较简单，state 存储数据，mutations 同步修改 state，actions 异步 commit mutation  
+在 mutation 中，state 也是沿袭 vue 的响应式原理，可以对原 state 进行修改
+
+### Redux
+
+```js
+import { createStore } from 'redux'
+
+const state = {
+  color: 'red',
+  count: 1
+}
+
+const reducer = (state: State, { type, payload }) => {
+  switch (type) {
+    case 'x':
+      // ...
+      return { ...state, x: payload }
+    case 'y':
+      // ...
+      return { ...state, y: payload }
+    case 'z':
+      // ...
+      return { ...state, z: payload }
+    // ...
+  }
+}
+
+const store = createStore(
+  reducer,
+  state,
+  window.__REDUX_DEVTOOLS_EXTENSION__()
+)
+```
+
+一个最简单的 redux 实例，通过 createStore 将 reducer 和 state 组合在一起。  
+因为 redux 的数据不可变思想，reducer 作为一个纯函数，需要返回一个全新的 state 对象，对原 state 进行替换。  
+关于 redux 的 action，个人感觉是个有点抽象的概念，按照 redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
+在代码中，action 直接被抽象成一个`{ type, payload }`的对象，在 reducer 对action 的 type 进行判断，最后对 state 做出相应的修改。  
+因为这层 action，可能会让很多人在入门 redux 的时候难以理解，也可能产生许多与 redux 思想不同的写法  
+比如像我一样直接把`{ type, payload }`当成`key: value`来传值 😂
+```js
+const reducer = (state, { type, payload }) => {
+  return { ...state, [type]: payload }
+}
+```
+
+### redux toolkit
+
+也许是 redux 的
+
+## 调试插件的比较
+
+### redux
+
+toolkit 的 configureStore 已经集成
+
