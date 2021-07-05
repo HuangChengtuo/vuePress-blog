@@ -189,7 +189,7 @@ Vuex 的初始化比较简单，state 存储数据，mutations 同步修改 stat
 ### Redux
 
 ```js
-import { createStore } from 'redux'
+import { createStore } from 'docs/article/stateManagement'
 
 const state = {
   color: 'red',
