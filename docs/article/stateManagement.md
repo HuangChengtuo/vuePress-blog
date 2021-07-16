@@ -34,9 +34,9 @@ Vuex 相较于 Redux，放弃了 action 的概念，并增加了异步修改 sta
 
 Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护一个 react-redux 插件来实现 React 与 Redux 交互
 
-* state：一个应用中只有一个 store 实例
+* state：一个应用中只有一个 store 实例，数据不可变
 * action：一个用来描述 state 变化的 event（*其实就是个普通的 js对象*）
-* reducer：改变 state 的唯一方法，且唯一，必须为纯函数，判断 action 对应的字段。Redux 推崇 数据不可变，每次 reducer 都是返回一个新的 state
+* reducer：改变 state 的唯一方法，且唯一，必须为纯函数，判断 action 对应的字段。Redux 推崇数据不可变，每次 reducer 都是返回一个新的 state
 
 ### 简单总结
 
@@ -148,8 +148,7 @@ Vuex 和 Redux 在视图层的使用，都是简单的获取 state，通过 comm
 
 由于 Vuex 是对 Vue 进行特化的状态管理工具，就可以通过全局插件的形式，注入到 Vue 的根实例中，使得 store 能在所有组件的 this 中获取到
 
-Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要`react-redux`这一插件。  
-在需要使用状态管理的顶层上包裹一层`Provider`标签，再在各个组件中单独引入获取 store 的方法
+Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要 `react-redux` 这一插件，在需要使用状态管理的顶层上包裹一层 `Provider` 标签，再在各个组件中单独引入获取 store 的方法
 
 ## 建立 store 方式的比较
 
@@ -221,9 +220,8 @@ const store = createStore(
 一个最简单的 Redux 实例，通过 createStore 将 reducer 和 state 组合在一起。  
 因为 Redux 的数据不可变思想，reducer 作为一个纯函数，需要返回一个全新的 state 对象，对原 state 进行替换。  
 关于 Redux 的 action，个人感觉是个有点抽象的概念，按照 Redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
-在代码中，action 直接被抽象成一个`{ type, payload }`的对象，在 reducer 对action 的 type 进行判断，最后对 state 做出相应的修改。  
-因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法  
-比如像我一样直接把`{ type, payload }`当成`key: value`来传值 😂
+在代码中，action 直接被抽象成一个 `{ type, payload }` 的对象，在 reducer 对action 的 type 进行判断，最后对 state 做出相应的修改。  
+因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 `{ type, payload }` 当成 `key: value` 来传值 😂
 
 ```js
 const reducer = (state, { type, payload }) => {
@@ -233,13 +231,11 @@ const reducer = (state, { type, payload }) => {
 
 ## Redux toolkit
 
-也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了
-[Redux Toolkit](https://redux-toolkit.js.org/) 这个插件，简化了许多 Redux 的操作，将许多 Redux 原来的多步操作封装到了一起。  
-在我看来，Redux 官方对于这个插件的推广力度还是挺大的，  
-在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用的，  
+也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了 [Redux Toolkit](https://redux-toolkit.js.org/) 这个工具，简化了许多 Redux 的操作，将许多 Redux 原来的多步操作封装到了一起。  
+在我看来，Redux 官方对于这个插件的推广力度还是挺大的，在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用的。  
 甚至于在 Redux 的官方文档中，教程也是通过 Redux Toolkit 来进行教学，`createStore`、`combineReducers`、`applyMiddleware`这些用法，都归到了 api 参考文档里去了
 
-先看 Redux Toolkit 最重要的一个 api
+先看 Redux Toolkit 官方的示例，展示了一个最重要的 api
 
 ```js
 import { createSlice } from '@reduxjs/toolkit'
@@ -267,7 +263,83 @@ export const counterSlice = createSlice({
 })
 ```
 
-可以看到 createSlice 中的reducers
+可以明显地看到 createSlice 中的 reducers 不仅没有一句 `switch`，并且还直接修改了 state 的值。  
+这就是 Redux Toolkit 最明显的一个变化，它移除了 Redux 中原来的 action 概念，将 action 原来的功能与 reducer 进行了合并， 并且可以在 reducer 中对 state 进行直接的修改，由 Redux Toolkit 来转化为数据不可变的操作
+
+再来看一个详细的 store 的创建
+
+```ts
+import { configureStore, createSlice } from '@reduxjs/toolkit'
+
+const state = {
+  color: 'red',
+  count: 1,
+  arr: [] as string[]
+}
+
+const slice = createSlice({
+  name: 'default',
+  initialState: state,
+  reducers: {
+    changeCount (state, action: { payload: number }) {
+      state.count = action.payload
+    },
+    changeArr (state) { state.arr.push('16') }
+  }
+})
+
+export const { changeCount, changeArr } = slice.actions
+
+// configureStore 就可以作为顶层的 Provider 标签中的 store 使用
+export default configureStore({
+  reducer: slice.reducer,
+  // reducer 可以支持多个 slice 进行合并
+  // reducer: {
+  //   user: userSlice.reducer,
+  //   modal: modalSlice.reducer,
+  //   theme: themeSlice.reducer,
+  //   ...
+  // },
+  middleware,
+  devTools: true
+})
+```
+
+在完整的使用中有这么一行代码 `export const { changeCount, changeArr } = slice.actions`，可以看出 action 概念并没有完全移除。  
+因为在视图层中，仍需要一个用来描述 state 变化的概念，这个概念就是由 `slice.actions` 中导出的与 reducer 同名的 action 方法
+
+```tsx
+import { useDispatch, useSelector } from 'react-redux'
+import { changeCount } from '@/store'
+import { Button } from 'antd'
+
+export default function ReduxA () {
+  const count = useSelector(state => state.count)
+  const dispatch = useDispatch()
+
+  function add () {
+    dispatch(changeCount(count + 1))
+    console.log(changeCount(count + 1))
+    // 完全可以直接写静态的 obj
+    // dispatch({ type: 'default/changeCount', payload: count + 1 })
+  }
+
+  return <>
+    <div>count:{count}</div>
+    <Button onClick={add}>add</Button>
+  </>
+}
+```
+
+![action](https://s1.huangchengtuo.com/img/210716action.png)
+
+![action](https://s1.huangchengtuo.com/img/210716actionlog.png)
+
+通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 slice 导出的 action 就是一个接收 payload，导出对应的 `{ type, payload }` 的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }`  
+通过导入 slice.actions 这个方法，能够很好的解决 dispatch 在 ts 类型限制上的缺失
+
+经过 Redux Toolkit 的封装的 Redux ，在用法上与 Vuex 有着很多的相似之处，将 reducer 与 action 的概念合并，与 Vuex 的 mutation 概念十分类似。  
+并且在视图层的使用，做得比 Vuex 更好
 
 ## 调试插件的比较
 
