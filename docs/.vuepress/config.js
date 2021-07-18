@@ -19,7 +19,7 @@ module.exports = {
       '/article/anime': ['/article/anime'],
       '/article/stateManagement': ['/article/stateManagement']
     },
-    sidebarDepth: 1,
+    sidebarDepth: 2,
     smoothScroll: true
   }
 }
