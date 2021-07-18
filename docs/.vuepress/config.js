@@ -6,15 +6,15 @@ module.exports = {
   themeConfig: {
     nav: [
       { text: '首页', link: 'http://www.huangchengtuo.com' },
-      { text: '文章', link: '/article/anime.md' },
-      { text: '笔记', link: '/note/basic.md' },
+      { text: '文章', link: '/article/' },
+      { text: '笔记', link: '/note/' },
       { text: '个人简历', link: '/resume.md' },
       { text: 'Gitee', link: 'https://gitee.com/HuangChengtuo' }
     ],
     logo: 'https://s1.huangchengtuo.com/img/pureDD.png',
     displayAllHeaders: true,
     sidebar: {
-      '/note/': ['basic', 'browser', 'css', 'js', 'react', 'ts'],
+      '/note/': ['', 'browser', 'css', 'js', 'react', 'ts'],
       '/resume/': ['/resume'],
       '/article/anime': ['/article/anime'],
       '/article/stateManagement': ['/article/stateManagement']

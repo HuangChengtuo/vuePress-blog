@@ -1,4 +1,4 @@
-# Redux 与 Vuex 的比较
+# Vuex 与 Redux 与 Redux toolkit
 
 跳槽新公司，技术栈从 Vue 转到 React，重拾一年没看过的 React 全家桶
 
