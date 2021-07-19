@@ -1,4 +1,4 @@
-# Vuex 与 Redux 与 Redux toolkit
+# Redux 与 Vuex 与 Redux Toolkit，被简化到主动简化
 
 跳槽新公司，技术栈从 Vue 转到 React，重拾一年没看过的 React 全家桶
 
@@ -22,7 +22,7 @@ Redux 和 Vuex 都是为了当多个组件共享状态时，仍能够保持单�
 > 当然吸取了一些 Redux 的特点，比如单状态树和便于测试和热重载的 API，但是也选择性的放弃了一些在 Vue 的场景下并不契合的特性  
 > [Vuex与Redux的主要区别在哪里，两者各有什么优缺点？- 尤雨溪](https://www.zhihu.com/question/38546875/answer/76970954)
 
-Vuex 是一个由 Vue 官方维护，Vue 专用的状态管理工具，从 Redux 上吸取了很多东西，并与 Vue 进行了高度的融合  
+Vuex 是一个由 Vue 官方维护，Vue 专用的状态管理工具，从 Redux 上吸取了很多东西，并与 Vue 进行了高度的融合。  
 Vuex 相较于 Redux，放弃了 action 的概念，并增加了异步修改 state 的方法，命名为 action
 
 * state：单一状态树，模块化的多个模块都储存在同一个 store 实例上
@@ -40,10 +40,12 @@ Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护
 
 ### 简单总结
 
+个人认为 Redux 相较于 Vuex 的难度要高不少的原因，就在于 action 和 reducer 这两个概念，
+
 对于 vuer 来说，Redux 就是只有一个 <ruby>mutation<rt>reducer</rt></ruby> ，往唯一的 <ruby>mutation<rt>reducer</rt></ruby> 里传入 mutation 的 Vuex
 
-对于 reacter 来说，Vuex 就是有多个 <ruby>reducer<rt>mutation</rt></ruby>，每个 <ruby>reducer<rt>mutation</rt></ruby>
-都包含了对应 action 的 Redux， 修改 state 时只需 <ruby>dispatch<rt>commit</rt></ruby> 对应的 <ruby>reducer<rt>mutation</rt></ruby>
+对于 reacter 来说，Vuex 就是有多个 <ruby>reducer<rt>mutation</rt></ruby>，每个 <ruby>reducer<rt>mutation</rt></ruby> 都包含了对应 action 的 Redux， 修改 state 时只需 <ruby>
+dispatch<rt>commit</rt></ruby> 对应的 <ruby>reducer<rt>mutation</rt></ruby>
 
 ## 视图层使用的比较
 
@@ -71,9 +73,8 @@ export default {
 </script>
 ```
 
-因为 Vue 是将所有的组件、插件挂载到同一个 Vue 实例中，所以所有组件中的 this 指向的都是唯一的一个实例  
-因此 Vuex 的使用，就可以直接通过 this 来获取相应的 state，并通过 commit 来调用相应的 mutation 来修改 state  
-也因为这个全局的 this，导致了 Vue 在 ts 方面的类型推导非常薄弱
+因为 Vue 是将所有的组件、插件挂载到同一个 Vue 实例中，所以所有组件中的 this 指向的都是唯一的一个实例，也因此 Vuex 的使用，就可以直接通过 this 来获取相应的 state，并通过 commit 来调用相应的 mutation 来修改 state。  
+因为这个全局的 this，导致了 Vue 在 ts 方面的类型推导非常薄弱
 
 ### React Hooks
 
@@ -102,7 +103,7 @@ export default function ReduxA () {
 }
 ```
 
-可以看到 `useSelector` 在 ts 中的类型标记还是略微有些繁琐的，可以自己再封装一层 hook，更加愉快的使用 ts  
+可以看到 `useSelector` 在 ts 中的类型标记还是略微有些繁琐的，需要自己手动标记 state 与 取出的值的类型，可以自己再封装一层 hook，更加愉快的使用 ts  
 另外对于 dispatch 的 ts 类型推断也是几乎没有，后文再讲
 
 ```ts
@@ -139,8 +140,7 @@ export default connect((state: State) => {
 })(ReduxB)
 ```
 
-React 在视图层中的使用，主要是通过 connect 包裹或者 hooks 来传递具体的 state 值  
-修改 state 需要通过往 dispatch 中传入相应的 action，通知 reducer 对 state 做具体的修改
+React 在视图层中的使用，主要是通过 connect 包裹或者 hooks 来传递具体的 state 值。修改 state 需要通过往 dispatch 中传入相应的 action，通知 reducer 对 state 做具体的修改
 
 ### 简单总结
 
@@ -229,11 +229,18 @@ const reducer = (state, { type, payload }) => {
 }
 ```
 
-## Redux toolkit
+## Redux Toolkit
 
-也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了 [Redux Toolkit](https://redux-toolkit.js.org/) 这个工具，简化了许多 Redux 的操作，将许多 Redux 原来的多步操作封装到了一起。  
-在我看来，Redux 官方对于这个插件的推广力度还是挺大的，在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用的。  
-甚至于在 Redux 的官方文档中，教程也是通过 Redux Toolkit 来进行教学，`createStore`、`combineReducers`、`applyMiddleware`这些用法，都归到了 api 参考文档里去了
+也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了 [Redux Toolkit](https://redux-toolkit.js.org/) 这个工具，简化了许多 Redux 的操作，将许多 Redux 原来的多步操作封装到了一起。
+
+> The **Redux Toolkit** package is intended to be the standard way to write Redux logic. It was originally created to help address three common concerns about Redux:
+> * "Configuring a Redux store is too complicated"
+> * "I have to add a lot of packages to get Redux to do anything useful"
+> * "Redux requires too much boilerplate code"
+
+可以看到 Redux 官方是打算将 Redux Toolkit 这个工具作为 Redux 的最佳实践，并进行推广的。  
+在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用，甚至于在 Redux 的官方文档中，教程也是通过 Redux Toolkit 来进行教学，`createStore`
+、`combineReducers`、`applyMiddleware`这些用法，都已经移入 api 参考之中了
 
 先看 Redux Toolkit 官方的示例，展示了一个最重要的 api
 
@@ -305,8 +312,10 @@ export default configureStore({
 })
 ```
 
-在完整的使用中有这么一行代码 `export const { changeCount, changeArr } = slice.actions`，可以看出 action 概念并没有完全移除。  
-因为在视图层中，仍需要一个用来描述 state 变化的概念，这个概念就是由 `slice.actions` 中导出的与 reducer 同名的 action 方法
+从 reducer 中的 changeCount 方法中可以看到，action 的概念还没有被完全移除，reducer 仍然需要通过 action 来接收具体的 payload 值，来对 state 进行赋值。（个人感觉完全可以去除这个 action 对象，只留一个 payload 字段）
+
+另外从 `export const { changeCount, changeArr } = slice.actions` 这行代码中也可以看出，action 概念并没有完全移除。  
+在视图层中，仍需要一个用来描述 state 变化的概念，这个概念就是由 `slice.actions` 中导出的与 reducer 同名的 action 方法
 
 ```tsx
 import { useDispatch, useSelector } from 'react-redux'
@@ -335,8 +344,12 @@ export default function ReduxA () {
 
 ![action](https://s1.huangchengtuo.com/img/210716actionlog.png)
 
-通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 slice 导出的 action 就是一个接收 payload，导出对应的 `{ type, payload }` 的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }`  
-通过导入 slice.actions 这个方法，能够很好的解决 dispatch 在 ts 类型限制上的缺失
+通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 `slice.actions` 导出的就是一个接收 payload，return 对应的 `{ type, payload }`
+的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }`。
+
+当然 `slice.actions` 这个方法也不是多此一举，它最大的作用就是补强了 Vuex 和 Redux 都十分薄弱的跳转功能，极大地提升了在 redux 中排查问题与溯源的便利性。  
+在 Vuex 和以前的 Redux 中，视图层的 commit 和 dispatch，都是使用字符串来对具体的操作进行描述，这也就导致了 ide 无法分析并跳转到具体的操作位置，后期维护的时候就得使用最原始的全局搜索来人肉跳转。  
+通过使用 `slice.actions` 导出的方法，就能快速地跳转到具体的 reducer，而且在 ts 中 也能够更好的对 payload 的类型进行限制
 
 经过 Redux Toolkit 的封装的 Redux ，在用法上与 Vuex 有着很多的相似之处，将 reducer 与 action 的概念合并，与 Vuex 的 mutation 概念十分类似。  
 并且在视图层的使用，做得比 Vuex 更好
