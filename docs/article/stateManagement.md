@@ -1,4 +1,4 @@
-# Redux 与 Vuex 与 Redux Toolkit，被简化到主动简化
+# Redux 与 Vuex 与 Redux Toolkit
 
 跳槽新公司，技术栈从 Vue 转到 React，重拾一年没看过的 React 全家桶
 
@@ -47,12 +47,12 @@ Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护
 对于 reacter 来说，Vuex 就是有多个 <ruby>reducer<rt>mutation</rt></ruby>，每个 <ruby>reducer<rt>mutation</rt></ruby> 都包含了对应 action 的 Redux， 修改 state 时只需 <ruby>
 dispatch<rt>commit</rt></ruby> 对应的 <ruby>reducer<rt>mutation</rt></ruby>
 
-## 视图层使用的比较
+## 业务层使用的比较
 
 ### Vuex
 
 ```vue
-<!--Vuex-->
+
 <template>
   <h1>{{ $store.state.count }}</h1>
 </template>
@@ -81,7 +81,6 @@ export default {
 从 v7.1.0 开始，react-redux 添加了对 Hooks 的支持
 
 ```tsx
-// a.tsx
 import { useSelector, useDispatch } from 'react-redux'
 import type { State } from '@/store'
 import { Button } from 'antd'
@@ -107,7 +106,6 @@ export default function ReduxA () {
 另外对于 dispatch 的 ts 类型推断也是几乎没有，后文再讲
 
 ```ts
-// store.ts
 import { useSelector } from 'react-redux'
 
 export function useMySelector<T = any> (fn: (state: State) => T) {
@@ -118,7 +116,6 @@ export function useMySelector<T = any> (fn: (state: State) => T) {
 ### React HOC
 
 ```tsx
-// b.tsx
 import { Button } from 'antd'
 import { connect, DispatchProp } from 'react-redux'
 import type { State } from '@/store'
@@ -140,11 +137,11 @@ export default connect((state: State) => {
 })(ReduxB)
 ```
 
-React 在视图层中的使用，主要是通过 connect 包裹或者 hooks 来传递具体的 state 值。修改 state 需要通过往 dispatch 中传入相应的 action，通知 reducer 对 state 做具体的修改
+React 在业务层中的使用，主要是通过 connect 包裹或者 hooks 来传递具体的 state 值。修改 state 需要通过往 dispatch 中传入相应的 action，通知 reducer 对 state 做具体的修改
 
 ### 简单总结
 
-Vuex 和 Redux 在视图层的使用，都是简单的获取 state，通过 commit 和 dispatch 通知 store 做出相应的动作
+Vuex 和 Redux 在业务层的使用，都是简单的获取 state，通过 commit 和 dispatch 通知 store 做出相应的动作
 
 由于 Vuex 是对 Vue 进行特化的状态管理工具，就可以通过全局插件的形式，注入到 Vue 的根实例中，使得 store 能在所有组件的 this 中获取到
 
@@ -220,7 +217,7 @@ const store = createStore(
 一个最简单的 Redux 实例，通过 createStore 将 reducer 和 state 组合在一起。  
 因为 Redux 的数据不可变思想，reducer 作为一个纯函数，需要返回一个全新的 state 对象，对原 state 进行替换。  
 关于 Redux 的 action，个人感觉是个有点抽象的概念，按照 Redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
-在代码中，action 直接被抽象成一个 `{ type, payload }` 的对象，在 reducer 对action 的 type 进行判断，最后对 state 做出相应的修改。  
+在代码中，action 就是一个 `{ type, payload }` 的对象，在 reducer 对 action 的 type 进行判断，最后对 state 做出相应的修改。  
 因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 `{ type, payload }` 当成 `key: value` 来传值 😂
 
 ```js
@@ -238,9 +235,11 @@ const reducer = (state, { type, payload }) => {
 > * "I have to add a lot of packages to get Redux to do anything useful"
 > * "Redux requires too much boilerplate code"
 
-可以看到 Redux 官方是打算将 Redux Toolkit 这个工具作为 Redux 的最佳实践，并进行推广的。  
+可以看到 Redux 官方是打算将 Redux Toolkit 这个工具作为 Redux 的最佳实践来进行推广的。  
 在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用，甚至于在 Redux 的官方文档中，教程也是通过 Redux Toolkit 来进行教学，`createStore`
 、`combineReducers`、`applyMiddleware`这些用法，都已经移入 api 参考之中了
+
+### 官方示例
 
 先看 Redux Toolkit 官方的示例，展示了一个最重要的 api
 
@@ -272,6 +271,8 @@ export const counterSlice = createSlice({
 
 可以明显地看到 createSlice 中的 reducers 不仅没有一句 `switch`，并且还直接修改了 state 的值。  
 这就是 Redux Toolkit 最明显的一个变化，它移除了 Redux 中原来的 action 概念，将 action 原来的功能与 reducer 进行了合并， 并且可以在 reducer 中对 state 进行直接的修改，由 Redux Toolkit 来转化为数据不可变的操作
+
+### store 的建立
 
 再来看一个详细的 store 的创建
 
@@ -314,8 +315,11 @@ export default configureStore({
 
 从 reducer 中的 changeCount 方法中可以看到，action 的概念还没有被完全移除，reducer 仍然需要通过 action 来接收具体的 payload 值，来对 state 进行赋值。（个人感觉完全可以去除这个 action 对象，只留一个 payload 字段）
 
-另外从 `export const { changeCount, changeArr } = slice.actions` 这行代码中也可以看出，action 概念并没有完全移除。  
-在视图层中，仍需要一个用来描述 state 变化的概念，这个概念就是由 `slice.actions` 中导出的与 reducer 同名的 action 方法
+另外从 `export const { changeCount, changeArr } = slice.actions` 这行代码中也可以看出，action 概念并没有完全移除。
+
+### 业务层的使用
+
+在业务层中，仍需要一个用来描述 state 变化的概念，这个概念就是由 `slice.actions` 中导出的与 reducer 同名的 action 方法
 
 ```tsx
 import { useDispatch, useSelector } from 'react-redux'
@@ -342,21 +346,22 @@ export default function ReduxA () {
 
 ![action](https://s1.huangchengtuo.com/img/210716action.png)
 
+---
+
 ![action](https://s1.huangchengtuo.com/img/210716actionlog.png)
 
 通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 `slice.actions` 导出的就是一个接收 payload，return 对应的 `{ type, payload }`
 的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }`。
 
-当然 `slice.actions` 这个方法也不是多此一举，它最大的作用就是补强了 Vuex 和 Redux 都十分薄弱的跳转功能，极大地提升了在 redux 中排查问题与溯源的便利性。  
-在 Vuex 和以前的 Redux 中，视图层的 commit 和 dispatch，都是使用字符串来对具体的操作进行描述，这也就导致了 ide 无法分析并跳转到具体的操作位置，后期维护的时候就得使用最原始的全局搜索来人肉跳转。  
+可以说在业务层中，action 原来的抽象概念仍然存在，只是具体的表现由原来的对象改为了方法。  
+当然 `slice.actions` 这个方法也不是多此一举，它最大的作用就是补强了在 Vuex 和 Redux 中都十分薄弱的跳转功能，极大地提升了在 redux 中排查问题与溯源的便利性。  
+在 Vuex 和以前的 Redux 中，业务层的 commit 和 dispatch，都是使用字符串来对具体的操作进行描述，这也就导致了 ide 无法分析并跳转到具体的操作位置，后期维护的时候就得使用最原始的全局搜索来人肉跳转。  
 通过使用 `slice.actions` 导出的方法，就能快速地跳转到具体的 reducer，而且在 ts 中 也能够更好的对 payload 的类型进行限制
 
-经过 Redux Toolkit 的封装的 Redux ，在用法上与 Vuex 有着很多的相似之处，将 reducer 与 action 的概念合并，与 Vuex 的 mutation 概念十分类似。  
-并且在视图层的使用，做得比 Vuex 更好
+### Redux Toolkit 与 Vuex 的比较
 
-## 调试插件的比较
+Redux Toolkit 在创建 store 的层面上，将 action 的概念去除，将原来只存在一个 reducer ，在 reducer 中进行 switch、case 的概念，转化为多个 reducer，并且在 reducer 中允许了可变数据的写法。  
+在本人看来，这些变化使得 Redux 的最佳实践与 Vuex 十分的相似，相同的 state，reducer 与 mutation，可变数据的写法，只有细微的 api 命名之间的区别，大大的降低了 Redux 的理解和入门门槛。  
+对于新人，无需再为 action 和 reducer 中的 switch 而头晕，对于 vuer，在使用了可变数据的写法之后，只需要重新记忆一下新的 api，就能很快无缝切换到 Redux 上。
 
-### Redux
-
-toolkit 的 configureStore 已经集成
-
+在具体业务中的使用，Redux 和 Vuex 的区别可以说就是 React 和 Vue 的区别，在使用了 Redux Toolkit 之后，Redux 相较于 Vuex 和以前的 Redux 最大的一个提升就是通过方法来传参，来调用指定的 reducer。
