@@ -2,7 +2,7 @@
 
 跳槽新公司，技术栈从 Vue 转到 React，重拾一年没看过的 React 全家桶
 
-React 有官方支持的中文文档，React Router 有印记中文1：1复刻的中文文档（*但还没更新 hook😂*），入门还是比较轻松的  
+React 有官方支持的中文文档，React Router 有印记中文 1：1 复刻的中文文档（_但还没更新 hook😂_），入门还是比较轻松的  
 Redux 就只能找到个人翻译的 gitbook 文档和阮一峰 2016 年的教程。。个人感觉入门要比前面两个高了一个门槛，就花时间自己啃啃生肉，多学习学习
 
 ## 单向数据流
@@ -20,23 +20,23 @@ Redux 和 Vuex 都是为了当多个组件共享状态时，仍能够保持单�
 
 > Vuex 其实是一个针对 Vue 特化的 Flux，主要是为了配合 Vue 本身的响应式机制。
 > 当然吸取了一些 Redux 的特点，比如单状态树和便于测试和热重载的 API，但是也选择性的放弃了一些在 Vue 的场景下并不契合的特性  
-> [Vuex与Redux的主要区别在哪里，两者各有什么优缺点？- 尤雨溪](https://www.zhihu.com/question/38546875/answer/76970954)
+> [Vuex 与 Redux 的主要区别在哪里，两者各有什么优缺点？- 尤雨溪](https://www.zhihu.com/question/38546875/answer/76970954)
 
 Vuex 是一个由 Vue 官方维护，Vue 专用的状态管理工具，从 Redux 上吸取了很多东西，并与 Vue 进行了高度的融合。  
 Vuex 相较于 Redux，放弃了 action 的概念，并增加了异步修改 state 的方法，命名为 action
 
-* state：单一状态树，模块化的多个模块都储存在同一个 store 实例上
-* getter：根据 state 的数据派生出的新的数据，并在依赖的相应数据变化前缓存
-* mutation：改变 state 的唯一方法，有多个 mutaion 可使用，只支持同步，并且在 mutation 中直接对原 state 进行更新，由 Vuex 来通知更新
-* action：能够异步的调用 mutation
+- state：单一状态树，模块化的多个模块都储存在同一个 store 实例上
+- getter：根据 state 的数据派生出的新的数据，并在依赖的相应数据变化前缓存
+- mutation：改变 state 的唯一方法，有多个 mutaion 可使用，只支持同步，并且在 mutation 中直接对原 state 进行更新，由 Vuex 来通知更新
+- action：能够异步的调用 mutation
 
 ### Redux
 
 Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护一个 react-redux 插件来实现 React 与 Redux 交互
 
-* state：一个应用中只有一个 store 实例，数据不可变
-* action：一个用来描述 state 变化的 event（*其实就是个普通的 js对象*）
-* reducer：改变 state 的唯一方法，且唯一，必须为纯函数，判断 action 对应的字段。Redux 推崇数据不可变，每次 reducer 都是返回一个新的 state
+- state：一个应用中只有一个 store 实例，数据不可变
+- action：一个用来描述 state 变化的 event（_其实就是个普通的 js 对象_）
+- reducer：改变 state 的唯一方法，且唯一，必须为纯函数，判断 action 对应的字段。Redux 推崇数据不可变，每次 reducer 都是返回一个新的 state
 
 ### 简单总结
 
@@ -52,7 +52,6 @@ dispatch<rt>commit</rt></ruby> 对应的 <ruby>reducer<rt>mutation</rt></ruby>
 ### Vuex
 
 ```vue
-
 <template>
   <h1>{{ $store.state.count }}</h1>
 </template>
@@ -108,7 +107,7 @@ export default function ReduxA () {
 ```ts
 import { useSelector } from 'react-redux'
 
-export function useMySelector<T = any> (fn: (state: State) => T) {
+export function useMySelector<T = any>(fn: (state: State) => T) {
   return useSelector<State, T>(fn)
 }
 ```
@@ -207,11 +206,7 @@ const reducer = (state: State, { type, payload }) => {
   }
 }
 
-const store = createStore(
-  reducer,
-  state,
-  window.__Redux_DEVTOOLS_EXTENSION__()
-)
+const store = createStore(reducer, state)
 ```
 
 一个最简单的 Redux 实例，通过 createStore 将 reducer 和 state 组合在一起。  
@@ -231,9 +226,10 @@ const reducer = (state, { type, payload }) => {
 也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了 [Redux Toolkit](https://redux-toolkit.js.org/) 这个工具，简化了许多 Redux 的操作，将许多 Redux 原来的多步操作封装到了一起。
 
 > The **Redux Toolkit** package is intended to be the standard way to write Redux logic. It was originally created to help address three common concerns about Redux:
-> * "Configuring a Redux store is too complicated"
-> * "I have to add a lot of packages to get Redux to do anything useful"
-> * "Redux requires too much boilerplate code"
+>
+> - "Configuring a Redux store is too complicated"
+> - "I have to add a lot of packages to get Redux to do anything useful"
+> - "Redux requires too much boilerplate code"
 
 可以看到 Redux 官方是打算将 Redux Toolkit 这个工具作为 Redux 的最佳实践来进行推广的。  
 在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用，甚至于在 Redux 的官方文档中，教程也是通过 Redux Toolkit 来进行教学，`createStore`
@@ -289,10 +285,12 @@ const slice = createSlice({
   name: 'default',
   initialState: state,
   reducers: {
-    changeCount (state, action: { payload: number }) {
+    changeCount(state, action: { payload: number }) {
       state.count = action.payload
     },
-    changeArr (state) { state.arr.push('16') }
+    changeArr(state) {
+      state.arr.push('16')
+    }
   }
 })
 
@@ -324,16 +322,17 @@ export default configureStore({
 ```tsx
 import { useDispatch, useSelector } from 'react-redux'
 import { changeCount } from '@/store'
+import type { State } from '@/store'
 import { Button } from 'antd'
 
-export default function ReduxA () {
+export default function ReduxA() {
   const count = useSelector(state => state.count)
   const dispatch = useDispatch()
 
-  function add () {
+  function add() {
     dispatch(changeCount(count + 1))
     console.log(changeCount(count + 1))
-    // 完全可以直接写静态的 obj
+    // 可以直接用 obj 代替
     // dispatch({ type: 'default/changeCount', payload: count + 1 })
   }
 
@@ -350,8 +349,7 @@ export default function ReduxA () {
 
 ![action](https://s1.huangchengtuo.com/img/210716actionlog.png)
 
-通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 `slice.actions` 导出的就是一个接收 payload，return 对应的 `{ type, payload }`
-的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }`。
+通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 `slice.actions` 导出的就是一个接收 payload，return 对应的 `{ type, payload }` 的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }`。
 
 可以说在业务层中，action 原来的抽象概念仍然存在，只是具体的表现由原来的对象改为了方法。  
 当然 `slice.actions` 这个方法也不是多此一举，它最大的作用就是补强了在 Vuex 和 Redux 中都十分薄弱的跳转功能，极大地提升了在 redux 中排查问题与溯源的便利性。  
@@ -361,7 +359,8 @@ export default function ReduxA () {
 ### Redux Toolkit 与 Vuex 的比较
 
 Redux Toolkit 在创建 store 的层面上，将 action 的概念去除，将原来只存在一个 reducer ，在 reducer 中进行 switch、case 的概念，转化为多个 reducer，并且在 reducer 中允许了可变数据的写法。  
-在本人看来，这些变化使得 Redux 的最佳实践与 Vuex 十分的相似，相同的 state，reducer 与 mutation，可变数据的写法，只有细微的 api 命名之间的区别，大大的降低了 Redux 的理解和入门门槛。  
+在本人看来，这些变化使得 Redux 的最佳实践与 Vuex 十分的相似，相同的 state，reducer 对应 mutation，都采用可变数据的写法，只有细微的 api 命名之间的区别，大大的降低了 Redux 的理解和入门门槛。  
 对于新人，无需再为 action 和 reducer 中的 switch 而头晕，对于 vuer，在使用了可变数据的写法之后，只需要重新记忆一下新的 api，就能很快无缝切换到 Redux 上。
 
-在具体业务中的使用，Redux 和 Vuex 的区别可以说就是 React 和 Vue 的区别，在使用了 Redux Toolkit 之后，Redux 相较于 Vuex 和以前的 Redux 最大的一个提升就是通过方法来传参，来调用指定的 reducer。
+在具体业务中的使用，Redux 和 Vuex 的区别可以说就是 React 和 Vue 的区别，React 通过 hook 或者 HOC 来获取 state 和修改 state 的 方法，Vue 则通过 this 来获取获取 state 和修改 state 的 方法。  
+对于业务层中的 action，Redux Toolkit 也是将原来的对象替换为了方法，极大的优化了跳转至定义的便利性。
