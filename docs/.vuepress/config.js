@@ -5,11 +5,17 @@ module.exports = {
   head: [['link', { rel: 'icon', href: '/logo.png' }]],
   themeConfig: {
     nav: [
-      { text: '首页', link: 'http://www.huangchengtuo.com' },
+      { text: '首页', link: 'http://www.huangchengtuo.com', target: '_self' },
       { text: '文章', link: '/article/' },
       { text: '笔记', link: '/note/' },
       { text: '个人简历', link: '/resume.md' },
-      { text: 'Gitee', link: 'https://gitee.com/HuangChengtuo' }
+      {
+        text: 'Git',
+        items: [
+          { text: 'Gitee', link: 'https://gitee.com/HuangChengtuo' },
+          { text: 'GitHub', link: 'https://github.com/HuangChengtuo' }
+        ]
+      }
     ],
     logo: 'https://s1.huangchengtuo.com/img/pureDD.png',
     displayAllHeaders: true,
