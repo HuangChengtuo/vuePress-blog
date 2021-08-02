@@ -1,4 +1,4 @@
-# Redux 与 Vuex 与 Redux Toolkit
+# Vuex 到 Redux 到 Redux Toolkit
 
 因为一些原因，技术栈从 Vue 转到 React，重拾一年没看过的 React 全家桶。
 
@@ -29,7 +29,7 @@ Vuex 相较于 Redux，放弃了 action 的概念，并增加了异步修改 sta
 - state：单一状态树，模块化的多个模块都储存在同一个 store 实例上
 - getter：根据 state 的数据派生出的新的数据，并在依赖的相应数据变化前缓存
 - mutation：改变 state 的唯一方法，有多个 mutaion 可使用，只支持同步，并且在 mutation 中直接对原 state 进行更新，由 Vuex 来通知更新
-- action：能够异步的调用 mutation
+- action：能够异步的调用 mutation，并能在业务层中抛出 promise，继续进行链式的操作
 
 ### Redux
 
@@ -41,11 +41,88 @@ Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护
 
 ### 简单总结
 
-个人认为 Redux 相较于 Vuex 的难度要高不少的原因，就在于 action 和 reducer 这两个概念，action 虽说只是一个 `{ type,payload }` 的对象，概念里却是一个描述 state 变化的东西，reducer 只有一个，需要在同一个 reducer 中根据 action 来进行 switch。。
+个人认为 Redux 相较于 Vuex 的难度要高不少的原因，就在于 action 和 reducer 这两个概念，action 作为里一个描述 state 变化的概念，却只是一个 `{type,payload}` 的对象， 真正对 state 进行操作变化的 reducer 却只有一个，需要在同一个 reducer 中根据 action 来进行 switch。。
+
+在异步方面，Vuex 直接由官方提供了 action 这一概念，api 的设计个人认为简洁明了，Redux 则需要通过 `redux-thunk` 等中间件来进行补强。
 
 对于 vuer 来说，Redux 就是只有一个 <ruby>mutation<rt>reducer</rt></ruby> ，往唯一的 <ruby>mutation<rt>reducer</rt></ruby> 里传入 mutation 的 Vuex。
 
 对于 reacter 来说，Vuex 就是有多个 <ruby>reducer<rt>mutation</rt></ruby>，每个 <ruby>reducer<rt>mutation</rt></ruby> 都包含了对应 action 的 Redux， 修改 state 时只需 <ruby>dispatch<rt>commit</rt></ruby> 对应的 <ruby>reducer<rt>mutation</rt></ruby>。
+
+## 建立 store 方式的比较
+
+### Vuex
+
+```js
+import { createStore } from 'vuex'
+
+const store = createStore({
+  state: {
+    count: 1,
+    user: null
+  },
+  mutations: {
+    changeCount(state, count) {
+      state.count = count
+    },
+    changeUser(state, user) {
+      state.user = user
+    }
+  },
+  actions: {
+    login({ commit, state }, form) {
+      return api.login(form).then(res => {
+        commit('changeUser', res)
+        return res
+      })
+    }
+  }
+})
+```
+
+Vuex 的初始化比较简单，state 存储数据，mutations 同步修改 state，actions 异步 commit 调用 mutation。  
+在 mutation 中，state 也是沿袭 Vue 的响应式原理，可以对原 state 进行修改。  
+由于在 commit 中是以字符串的形式来调用 mutation，也导致了 Vuex 对于 ts 的不友好。
+
+### Redux
+
+```js
+import { createStore } from 'docs/article/stateManagement'
+
+const state = {
+  color: 'red',
+  count: 1
+}
+
+const reducer = (state: State, { type, payload }) => {
+  switch (type) {
+    case 'x':
+      // ...
+      return { ...state, x: '...' }
+    case 'y':
+      // ...
+      return { ...state, y: '...' }
+    case 'z':
+      // ...
+      return { ...state, z: '...' }
+    // ...
+  }
+}
+
+const store = createStore(reducer, state, middleware)
+```
+
+一个最简单的 Redux 实例，通过 createStore 将 reducer 和 state 组合在一起。  
+因为 Redux 的数据不可变思想，reducer 作为一个纯函数，需要返回一个全新的 state 对象，对原 state 进行替换。  
+关于 Redux 的 action，个人感觉是个非常抽象的概念，按照 Redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
+在代码中，action 就是一个 `{ type, payload }` 的对象，在 reducer 对 action 的 type 进行判断，最后对 state 做出相应的修改。  
+因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 `{ type, payload }` 当成 `key: value` 来传值 😅
+
+```js
+const reducer = (state, { type, payload }) => {
+  return { ...state, [type]: payload }
+}
+```
 
 ## 业务层使用的比较
 
@@ -145,81 +222,6 @@ Vuex 和 Redux 在业务层的使用，都是简单的获取 state，通过 comm
 由于 Vuex 是对 Vue 进行特化的状态管理工具，就可以通过全局插件的形式，注入到 Vue 的根实例中，使得 store 能在所有组件的 this 中获取到。
 
 Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要 `react-redux` 这一插件，在需要使用状态管理的顶层上包裹一层 `Provider` 标签，再在各个组件中单独引入获取 store 的方法。
-
-## 建立 store 方式的比较
-
-### Vuex
-
-```js
-import { createStore } from 'vuex'
-
-const store = createStore({
-  state: {
-    color: 'red',
-    count: 1,
-    theme: 'light'
-  },
-  mutations: {
-    changeCount(state, count) {
-      state.count = count
-    },
-    changeTheme(state, theme) {
-      state.theme = theme
-    }
-  },
-  actions: {
-    changeTheme({ commit, state }, id) {
-      api.getTheme(id).then(res => {
-        commit('changeTheme', res)
-      })
-    }
-  }
-})
-```
-
-Vuex 的初始化比较简单，state 存储数据，mutations 同步修改 state，actions 异步 commit 调用 mutation。  
-在 mutation 中，state 也是沿袭 Vue 的响应式原理，可以对原 state 进行修改。  
-由于在 commit 中是以字符串的形式来调用 mutation，也导致了 Vuex 对于 ts 的天生不好支持。。
-
-### Redux
-
-```js
-import { createStore } from 'docs/article/stateManagement'
-
-const state = {
-  color: 'red',
-  count: 1
-}
-
-const reducer = (state: State, { type, payload }) => {
-  switch (type) {
-    case 'x':
-      // ...
-      return { ...state, x: '...' }
-    case 'y':
-      // ...
-      return { ...state, y: '...' }
-    case 'z':
-      // ...
-      return { ...state, z: '...' }
-    // ...
-  }
-}
-
-const store = createStore(reducer, state, middleware)
-```
-
-一个最简单的 Redux 实例，通过 createStore 将 reducer 和 state 组合在一起。  
-因为 Redux 的数据不可变思想，reducer 作为一个纯函数，需要返回一个全新的 state 对象，对原 state 进行替换。  
-关于 Redux 的 action，个人感觉是个非常抽象的概念，按照 Redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
-在代码中，action 就是一个 `{ type, payload }` 的对象，在 reducer 对 action 的 type 进行判断，最后对 state 做出相应的修改。  
-因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 `{ type, payload }` 当成 `key: value` 来传值 😅
-
-```js
-const reducer = (state, { type, payload }) => {
-  return { ...state, [type]: payload }
-}
-```
 
 ## Redux Toolkit
 

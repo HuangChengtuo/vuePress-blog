@@ -12,7 +12,7 @@ export default {
     return {
       directory: [
         { label: '鼠标滚轮翻页效果', link: 'anime' },
-        { label: 'Vuex 与 Redux 与 Redux toolkit', link: 'stateManagement' },
+        { label: 'Vuex 到 Redux 到 Redux Toolkit', link: 'stateManagement' }
       ]
     }
   }
