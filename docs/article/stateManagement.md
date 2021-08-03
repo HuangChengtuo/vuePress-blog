@@ -1,9 +1,9 @@
-# Vuex 到 Redux 到 Redux Toolkit
+# Vuex 和 Redux 和 Redux Toolkit 状态管理的区别
 
 因为一些原因，技术栈从 Vue 转到 React，重拾一年没看过的 React 全家桶。
 
-React 有官方支持的中文文档，Router 的概念和 api 比较少，还是比较好懂的。  
-以前学 React 的时候，就感受到 Redux 的难度和复杂，而且先接触了 Vuex 再接触 Redux，就会感受到 Redux 配置的复杂~~又别扭~~，中文文档也大多是个人翻译，时间比较久远，没有 Hook 的相关资料，就重新通过英文文档学习一遍。
+React 有官方支持的中文文档，Router 的概念和 api 比较少，还是比较好懂。  
+至于 Redux，以前学 React 的时候，就感受到 Redux 的难度和复杂，而且先接触了 Vuex 再接触 Redux，就感觉 Redux 配置的复杂~~又别扭~~，中文文档也大多是个人翻译，时间比较久远，没有 Hook 的相关资料，就重新通过英文文档学习一遍。
 
 ## 单向数据流
 
@@ -43,7 +43,7 @@ Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护
 
 个人认为 Redux 相较于 Vuex 的难度要高不少的原因，就在于 action 和 reducer 这两个概念，action 作为里一个描述 state 变化的概念，却只是一个 `{type,payload}` 的对象， 真正对 state 进行操作变化的 reducer 却只有一个，需要在同一个 reducer 中根据 action 来进行 switch。。
 
-在异步方面，Vuex 直接由官方提供了 action 这一概念，api 的设计个人认为简洁明了，Redux 则需要通过 `redux-thunk` 等中间件来进行补强。
+在异步方面，Vuex 直接提供了 action 这一概念，api 的设计个人认为简洁明了，Redux 则需要通过 `redux-thunk` 等中间件来进行补强。
 
 对于 vuer 来说，Redux 就是只有一个 <ruby>mutation<rt>reducer</rt></ruby> ，往唯一的 <ruby>mutation<rt>reducer</rt></ruby> 里传入 mutation 的 Vuex。
 
@@ -71,7 +71,7 @@ const store = createStore({
   },
   actions: {
     login({ commit, state }, form) {
-      return api.login(form).then(res => {
+      return ajax.login(form).then(res => {
         commit('changeUser', res)
         return res
       })
@@ -81,13 +81,13 @@ const store = createStore({
 ```
 
 Vuex 的初始化比较简单，state 存储数据，mutations 同步修改 state，actions 异步 commit 调用 mutation。  
-在 mutation 中，state 也是沿袭 Vue 的响应式原理，可以对原 state 进行修改。  
+在 mutation 中，state 也是沿袭 Vue 的响应式，可以对原 state 进行修改。  
 由于在 commit 中是以字符串的形式来调用 mutation，也导致了 Vuex 对于 ts 的不友好。
 
 ### Redux
 
 ```js
-import { createStore } from 'docs/article/stateManagement'
+import { createStore } from 'redux'
 
 const state = {
   color: 'red',
@@ -116,7 +116,8 @@ const store = createStore(reducer, state, middleware)
 因为 Redux 的数据不可变思想，reducer 作为一个纯函数，需要返回一个全新的 state 对象，对原 state 进行替换。  
 关于 Redux 的 action，个人感觉是个非常抽象的概念，按照 Redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
 在代码中，action 就是一个 `{ type, payload }` 的对象，在 reducer 对 action 的 type 进行判断，最后对 state 做出相应的修改。  
-因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 `{ type, payload }` 当成 `key: value` 来传值 😅
+因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 Redux 当作 localStorage 来用了。。  
+把 action 对象 `{ type, payload }` 当成 `key: value` 来传值，Redux 就只剩下 state，getter，setter 这三个概念 😅
 
 ```js
 const reducer = (state, { type, payload }) => {
@@ -134,23 +135,30 @@ const reducer = (state, { type, payload }) => {
 </template>
 
 <script>
+import { useStore } from 'vuex'
+
 export default {
-  methods: {
-    add() {
+  setup() {
+    const store = useStore()
+
+    function add() {
       this.$store.commit('changeCount', this.$store.state.count + 666)
-    },
-    reset() {
+    }
+
+    function reset() {
       this.$store.dispatch('login').then(() => {
         // ...
       })
     }
+
+    return { add, reset }
   }
 }
 </script>
 ```
 
-因为 Vue 是将所有的组件、插件挂载到同一个 Vue 实例中，所以所有组件中的 this 指向的都是唯一的一个实例，也因此 Vuex 的使用，就可以直接通过 this 来获取相应的 state，并通过 commit 来调用相应的 mutation 来修改 state。  
-因为这个全局的 this，导致了 Vue 在 ts 方面的类型推导非常薄弱
+因为 Vue 是将所有的组件、插件挂载到同一个 Vue 实例中，所以所有组件中的 this 指向的都是唯一的一个实例，Vuex 就可以直接通过 this 来获取相应的 state，并通过 commit，action 来调用相应的 mutation 来修改 state。  
+因为这个全局的 this，导致了 Vue 在 ts 的各种不友好。
 
 ### React Hooks
 
@@ -178,8 +186,7 @@ export default function ReduxA () {
 }
 ```
 
-可以看到 `useSelector` 在 ts 中的类型标记还是略微有些繁琐的，更没有自动的类型推断，需要自己手动标记 state 与 取出的值的类型，可以自己再封装一层 hook，更加愉快的使用 ts。  
-另外对于 dispatch 的 ts 类型推断也是几乎没有，后文再讲。
+可以看到 `useSelector` 在 ts 中的类型标记还是略微有些繁琐的，每个文件里都需要引入 state 的类型并手动标记取出的值的类型，可以自己再封装一层 hook，更加愉快的使用 ts。
 
 ```ts
 import { useSelector } from 'react-redux'
@@ -223,11 +230,88 @@ Vuex 和 Redux 在业务层的使用，都是简单的获取 state，通过 comm
 
 Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要 `react-redux` 这一插件，在需要使用状态管理的顶层上包裹一层 `Provider` 标签，再在各个组件中单独引入获取 store 的方法。
 
+在业务层中，通知 store 对 state 进行修改的场合，Vuex 和 Redux 都是通过字符串或者对象中的字符串来进行通知，导致了 IDE 几乎不能推断并跳转到对应的修改逻辑，对后续的人员维护来说无疑是一个痛点。
+
+## 异步
+
+### Vuex
+
+Vuex 中的异步，十分简单，只需要在 action 中建立函数来 commit 相应的 mutation，就能在业务中通过 dispatch 进行异步的修改 state 和链式回调。
+
+```js
+// store.js
+const actions = {
+  login({ commit }, form) {
+    return ajax.login(form).then(res => {
+      commit('changeUser', res)
+      return res
+    })
+  }
+}
+// Playground.vue
+function fn() {
+  this.$store.dispatch('login', form).then(res => {
+    //...
+  })
+}
+```
+
+### Redux
+
+Redux 不自带异步的操作，需要通过一些中间件来实现，如 Redux 官方的 `redux-thunk`。
+
+```js
+import ThunkMiddleware from 'redux-thunk'
+
+const store = configureStore({
+  reducer: slice.reducer,
+  middleware: [ThunkMiddleware]
+})
+
+function asyncFn(form) {
+  return function(dispatch) {
+    return ajax.login(form).then(res => {
+      dispatch(changeUser(res))
+      return res
+    })
+  }
+}
+```
+
+Redux 在中间件中传入 `redux-thunk` ，就可以在业务层中使用异步的操作，将定义的 asyncFn 传入 dispatch，就可以在 dispatch 后面继续链式的 `.then` 操作。
+
+```js
+const dispatch = useDispatch()
+dispatch(asyncFn(form)).then(res => {
+  //...
+})
+```
+
+在 js 中，接下来就可以万事大吉，愉快的进行各种异步了，但在 ts 中这个异步会导致类型的错乱，then 不存在在 dispatch 上。
+
+![error](https://s1.huangchengtuo.com/img/210803error.png)
+
+需要做一次“类型体操”，重新封装一下原来的 `useDispatch` hook 函数。
+
+```ts
+import { useDispatch } from 'react-redux'
+import { ThunkDispatch } from 'redux-thunk'
+import { Action } from 'redux'
+
+export function useMyDispatch() {
+  return useDispatch<ThunkDispatch<State, void, Action>>()
+}
+```
+
+这样就能获得完美的 ts 支持，不仅能够通过 dispatch 中传入的参数判断出是否允许异步链式调用，还能够帮你推断出 `.then` 中的 res 的具体类型。
+
+![error](https://s1.huangchengtuo.com/img/210803number.png)
+
 ## Redux Toolkit
 
 关于状态管理，虽然 Dan Abramov 也发表过 [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367) 这篇文章（_Vuex 文档也引用过_），但鉴于目前校招必学全家桶的环境，状态管理还是十分重要的。但对于初学者和小项目来说，Redux 还是比 Vuex 重了不少。
 
-也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了 [Redux Toolkit](https://redux-toolkit.js.org/) 这个工具，简化了许多 Redux 的操作，将许多 Redux 原来的多步操作封装到了一起。
+也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了 [Redux Toolkit](https://redux-toolkit.js.org/) 这个工具。
 
 > The **Redux Toolkit** package is intended to be the standard way to write Redux logic. It was originally created to help address three common concerns about Redux:
 >
@@ -235,9 +319,9 @@ Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要
 > - "I have to add a lot of packages to get Redux to do anything useful"
 > - "Redux requires too much boilerplate code"
 
-可以看到 Redux 官方是打算将 Redux Toolkit 这个工具作为 Redux 的最佳实践来进行推广的。  
+可以看到 Redux 官方是打算将 Redux Toolkit 这个工具作为 Redux 的最佳实践来进行推广，并简化了许多 Redux 的操作，简化了一些过于复杂的概念。  
 在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用，甚至于在 Redux 的官方文档中，教程也是通过 Redux Toolkit 来进行教学，`createStore`
-、`combineReducers`、`applyMiddleware`这些用法，都已经移入 api 参考之中了
+、`combineReducers`、`applyMiddleware`这些用法，只剩 api 参考，供想要非常深入的人阅读。
 
 ### 官方示例
 
