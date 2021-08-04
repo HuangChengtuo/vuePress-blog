@@ -80,6 +80,16 @@ const store = createStore({
 })
 ```
 
+mutations 也可以使用 Redux 一样的格式。
+
+```js
+mutations: {
+  increment (state, action) {
+    state.count += action.payload
+  }
+}
+```
+
 Vuex 的初始化比较简单，state 存储数据，mutations 同步修改 state，actions 异步 commit 调用 mutation。  
 在 mutation 中，state 也是沿袭 Vue 的响应式，可以对原 state 进行修改。  
 由于在 commit 中是以字符串的形式来调用 mutation，也导致了 Vuex 对于 ts 的不友好。
@@ -160,6 +170,15 @@ export default {
 因为 Vue 是将所有的组件、插件挂载到同一个 Vue 实例中，所以所有组件中的 this 指向的都是唯一的一个实例，Vuex 就可以直接通过 this 来获取相应的 state，并通过 commit，action 来调用相应的 mutation 来修改 state。  
 因为这个全局的 this，导致了 Vue 在 ts 的各种不友好。
 
+另外 commit 的传参，也可以用和 Redux 的 action 的格式。
+
+```js
+this.$store.commit({
+  type: 'changeCount',
+  payload: this.$store.state.count + 666
+})
+```
+
 ### React Hooks
 
 从 v7.1.0 开始，react-redux 添加了对 Hooks 的支持，通过 `useSelector` 来获取 state 中具体的数据，`useDispatch` 来传递 action，修改 state。
@@ -224,11 +243,11 @@ React 在业务层中的使用，主要是通过 `connect` 包裹或者 `useSele
 
 ### 简单总结
 
-Vuex 和 Redux 在业务层的使用，都是简单的获取 state，通过 commit 和 dispatch 通知 store 来对 state 做出相应的修改。
+在具体业务中的使用，Redux 和 Vuex 的区别可以说就是 React 和 Vue 的区别，React 通过 hook 或者 HOC 来获取 state 和修改 state 的方法，Vue 则通过 this 来获取获取 state 和修改 state 的方法。
 
 由于 Vuex 是对 Vue 进行特化的状态管理工具，就可以通过全局插件的形式，注入到 Vue 的根实例中，使得 store 能在所有组件的 this 中获取到。
 
-Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要 `react-redux` 这一插件，在需要使用状态管理的顶层上包裹一层 `Provider` 标签，再在各个组件中单独引入获取 store 的方法。
+Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要 `react-redux` 这一插件，在顶层上包裹一层 `Provider` 标签，再在各个组件中单独引入获取 store 的方法。
 
 在业务层中，通知 store 对 state 进行修改的场合，Vuex 和 Redux 都是通过字符串或者对象中的字符串来进行通知，导致了 IDE 几乎不能推断并跳转到对应的修改逻辑，对后续的人员维护来说无疑是一个痛点。
 
@@ -236,7 +255,7 @@ Redux 则是一个单纯的 js 状态管理工具，在 React 中使用就需要
 
 ### Vuex
 
-Vuex 中的异步，十分简单，只需要在 action 中建立函数来 commit 相应的 mutation，就能在业务中通过 dispatch 进行异步的修改 state 和链式回调。
+Vuex 中的异步，十分简单，只需要在 action 中建立函数来 commit 相应的 mutation，就能在业务中通过 dispatch 进行异步的修改 state ，返回 Promise 进行链式回调。
 
 ```js
 // store.js
@@ -278,7 +297,7 @@ function asyncFn(form) {
 }
 ```
 
-Redux 在中间件中传入 `redux-thunk` ，就可以在业务层中使用异步的操作，将定义的 asyncFn 传入 dispatch，就可以在 dispatch 后面继续链式的 `.then` 操作。
+Redux 在中间件中传入 `redux-thunk` ，就可以在业务层中使用异步的操作，将定义的 asyncFn 传入 dispatch，就可以在 dispatch 后面继续链式操作。
 
 ```js
 const dispatch = useDispatch()
@@ -303,13 +322,21 @@ export function useMyDispatch() {
 }
 ```
 
-这样就能获得完美的 ts 支持，不仅能够通过 dispatch 中传入的参数判断出是否允许异步链式调用，还能够帮你推断出 `.then` 中的 res 的具体类型。
+这样就能获得完美的 ts 支持，传入 dispatch 的 asyncFn 的传参有了类型约束，而且能够通过 dispatch 中传入的参数判断出是否允许异步链式调用，还能够帮你推断出 `.then` 中的 res 的具体类型。
 
 ![error](https://s1.huangchengtuo.com/img/210803number.png)
 
-## Redux Toolkit
+### 简单总结
 
-关于状态管理，虽然 Dan Abramov 也发表过 [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367) 这篇文章（_Vuex 文档也引用过_），但鉴于目前校招必学全家桶的环境，状态管理还是十分重要的。但对于初学者和小项目来说，Redux 还是比 Vuex 重了不少。
+Vuex 的异步操作由官方进行提供，与同步操作 commit 不同，使用 dispatch，能够较直观的看出是同步还是异步。  
+Redux 的异步操作需要由中间件进行实现，同步异步都是用同一个 dispatch 来调用。
+
+Vuex 只需要在异步的 action 中进行异步操作，调用 commit 即可。  
+Redux 需要通过一个方法，往 dispatch 中传入一个新的方法，有点套娃。
+
+Vuex 和 Redux 都是通过在异步操作结束后，返回一个 Promise，来支持 dispach 继续进行 promise 的操作。
+
+## Redux Toolkit
 
 也许是 Redux 的概念和流程对于大多数人确实是比较复杂，Redux 官方又推出了 [Redux Toolkit](https://redux-toolkit.js.org/) 这个工具。
 
@@ -321,7 +348,7 @@ export function useMyDispatch() {
 
 可以看到 Redux 官方是打算将 Redux Toolkit 这个工具作为 Redux 的最佳实践来进行推广，并简化了许多 Redux 的操作，简化了一些过于复杂的概念。  
 在 [React Redux](https://react-redux.js.org/) 的官方文档中，所有的教程都是结合 Redux Toolkit 来使用，甚至于在 Redux 的官方文档中，教程也是通过 Redux Toolkit 来进行教学，`createStore`
-、`combineReducers`、`applyMiddleware`这些用法，只剩 api 参考，供想要非常深入的人阅读。
+、`combineReducers`、`applyMiddleware`这些用法，只剩 api 参考，供想要深入的人参考。
 
 ### 官方示例
 
@@ -354,7 +381,7 @@ export const counterSlice = createSlice({
 ```
 
 可以明显地看到 createSlice 中的 reducers 不仅没有一句 `switch`，并且还直接修改了 state 的值。  
-这就是 Redux Toolkit 最明显的一个变化，它移除了 Redux 中原来的 action 概念，将 action 原来的功能与 reducer 进行了合并， 并且可以在 reducer 中对 state 进行直接的修改，由 Redux Toolkit 来转化为数据不可变的操作
+这就是 Redux Toolkit 最明显的一个变化，它弱化了 Redux 中原来的 action 概念，将 action 原来的功能与 reducer 进行了合并， 并且可以在 reducer 中对 state 进行直接的修改，由 Redux Toolkit 内部来进行数据不可变的操作。
 
 ### store 的建立
 
@@ -399,13 +426,9 @@ export default configureStore({
 })
 ```
 
-从 reducer 中的 changeCount 方法中可以看到，action 的概念还没有被完全移除，reducer 仍然需要通过 action 来接收具体的 payload 值，来对 state 进行赋值。（个人感觉完全可以去除这个 action 对象，只留一个 payload 字段）
+从 reducer 中的 changeCount 方法中可以看到，action 的概念还没有被完全移除，reducer 仍然需要通过 action 来接收具体的 payload 值，来对 state 进行赋值，`type` 这个字段则是不再被用到。
 
-另外从 `export const { changeCount, changeArr } = slice.actions` 这行代码中也可以看出，action 概念并没有完全移除。
-
-### 异步
-
-Redux Toolkit 中的异步，还是非常繁琐，远没有 Vuex 的异步来的简便。。
+另外从 `export const { changeCount, changeArr } = slice.actions` 这行代码导出的 action，也改变了原来业务中 action 的字符串用法。
 
 ### 业务层的使用
 
@@ -435,27 +458,74 @@ export default function ReduxA() {
 }
 ```
 
+可以看到通过 dispatch 现在接收的从 `slice.actions` 中导出的方法，就像是使用了 thunk 一样的异步操作。
+
 ![action](https://s1.huangchengtuo.com/img/210716action.png)
 
 ---
 
 ![action](https://s1.huangchengtuo.com/img/210716actionlog.png)
 
-通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 `slice.actions` 导出的就是一个接收 payload，return 对应的 `{ type, payload }` 的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }`。
+通过 ts 的提示和 `console.log(changeCount(count + 1))` 打印出的执行结果可以知道，从 `slice.actions` 导出的就是一个接收 payload，return 对应的 `{ type, payload }` 的方法。`changeCount(count + 1)` 这个方法完全可以替换为 `{ type: 'default/changeCount', payload: count + 1 }` 一个静态的对象。
 
-可以说在业务层中，action 原来的抽象概念仍然存在，只是具体的表现由原来的对象改为了方法。  
-当然 `slice.actions` 这个方法也不是多此一举，它最大的作用就是补强了在 Vuex 和 Redux 中都十分薄弱的跳转功能，极大地提升了在 redux 中排查问题与溯源的便利性。  
-在 Vuex 和以前的 Redux 中，业务层的 commit 和 dispatch，都是使用字符串来对具体的操作进行描述，这也就导致了 ide 无法分析并跳转到具体的操作位置，后期维护的时候就得使用最原始的全局搜索来人肉跳转。  
-通过使用 `slice.actions` 导出的方法，就能快速地跳转到具体的 reducer，而且在 ts 中 也能够更好的对 payload 的类型进行限制
+把对象改为 `slice.actions` 传出的方法，当然不是多此一举，它最大的作用就是补强了在 Vuex 和 Redux 中都十分薄弱的跳转功能，极大地提升了在 redux 中排查问题与溯源的便利性。  
+在 Vuex 和以前的 Redux 中，业务层的 commit 和 dispatch，都是使用字符串来对具体的操作进行描述，这也就导致了 IDE 无法分析并跳转到具体的操作位置，后期维护的时候就得使用最原始的全局搜索来人肉跳转。  
+通过使用 `slice.actions` 导出的方法，最快两次，就能跳转到具体的 reducer，而且在 ts 中也能够更好的对 payload 的类型进行限制。
 
-### Redux Toolkit 与 Vuex 的比较
+### 异步
+
+Redux Toolkit 中的异步，个人感觉比使用中间件还要复杂 😂  
+就直接贴个官方文档的示例吧。
+
+```js
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { userAPI } from './userAPI'
+
+// First, create the thunk
+const fetchUserById = createAsyncThunk('users/fetchByIdStatus', async (userId, thunkAPI) => {
+  const response = await userAPI.fetchById(userId)
+  return response.data
+})
+
+// Then, handle actions in your reducers:
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: { entities: [], loading: 'idle' },
+  reducers: {
+    // standard reducer logic, with auto-generated action types per reducer
+  },
+  extraReducers: builder => {
+    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(fetchUserById.fulfilled, (state, action) => {
+      // Add user to the state array
+      state.entities.push(action.payload)
+    })
+  }
+})
+
+// Later, dispatch the thunk as needed in the app
+dispatch(fetchUserById(123))
+```
+
+extraReducers 可以简化为一个对象
+
+```js
+extraReducers: {
+    [fetchUserById.padding]: (state, action) => {},
+    [fetchUserById.fulfilled]: (state, action) => {},
+    [fetchUserById.rejected]: (state, action) => {}
+}
+```
+
+## 最后总结
 
 Redux Toolkit 在创建 store 的层面上，将 action 的概念去除，将原来只存在一个 reducer ，在 reducer 中进行 switch、case 的概念，转化为多个 reducer，并且在 reducer 中允许了可变数据的写法。
 
-在本人看来，这些变化使得 Redux 的最佳实践与 Vuex 十分的相似，相同的 state，reducer 对应 mutation，都采用可变数据的写法，只有细微的 api 命名之间的区别，大大的降低了 Redux 的理解和入门门槛。
+在本人看来，这些变化使得 Redux 的最佳实践与 Vuex 十分的相似，相同的 state，reducer 对应 mutation，都采用可变数据的写法，只有细微的 api 命名之间的区别。  
+对于新人，无需再为 action 和 reducer 中的 switch 而头晕，大大的降低了 Redux 的理解和入门门槛。  
+对于 vuer，在使用了可变数据的写法之后，只需要重新记忆一下新的 api，就能很快无缝切换到 Redux 上。
 
-对于新人，无需再为 action 和 reducer 中的 switch 而头晕，对于 vuer，在使用了可变数据的写法之后，只需要重新记忆一下新的 api，就能很快无缝切换到 Redux 上。
+在具体业务中的使用，Redux Toolkit 最大的改进，就是将原来的 action 对象替换为了方法，极大的提升了跳转至定义的便利性。
 
-在具体业务中的使用，Redux 和 Vuex 的区别可以说就是 React 和 Vue 的区别，React 通过 hook 或者 HOC 来获取 state 和修改 state 的 方法，Vue 则通过 this 来获取获取 state 和修改 state 的 方法，Redux Toolkit 并没有过多的改进。最大的变化，就是将原来的 action 对象替换为了方法，极大的提升了跳转至定义的便利性。
-
-尽管通过 Redux Toolkit 的封装，Redux 的用法变得与 Vuex 更加相似，但
+尽管通过 Redux Toolkit 的封装，Redux 的用法变得与 Vuex 更加相似，但 Redux 和 Redux Toolkit 仍然有着比 Vuex 更高的扩展性。  
+面对复杂业务，Redux 和 Redux Toolkit 仍然提供了很多的 api 供用户进行自定义扩展，社区也有许多的中间件可以进行自行组合。不像 Vuex，~~只会心疼 giegie~~只有文档上基本的用法和 plugin 传出一个简单的钩子。
