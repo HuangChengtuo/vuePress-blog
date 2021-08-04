@@ -1,7 +1,7 @@
 <template>
   <p id="custom-action">
     <a href="http://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
-    <router-link to="/note" class="nav-link action-button">进入笔记 →</router-link>
+    <router-link to="/article" class="nav-link action-button">进入文章 →</router-link>
   </p>
 </template>
 
@@ -20,9 +20,9 @@
     border-radius: 4px;
     box-sizing: border-box;
     border-bottom: 1px solid #389d70;
+    transition: all 0.5s;
 
     &:hover {
-      cursor: pointer;
       background: #4abf8a;
     }
   }
