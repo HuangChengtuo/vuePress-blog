@@ -3,7 +3,7 @@
 因为一些原因，技术栈从 Vue 转到 React，重拾一年没看过的 React 全家桶。
 
 React 有官方支持的中文文档，Router 的概念和 api 比较少，还是比较好懂。  
-至于 Redux，以前学 React 的时候，就感受到 Redux 的难度和复杂，而且先接触了 Vuex 再接触 Redux，就感觉 Redux 配置的复杂~~又别扭~~，中文文档也大多是个人翻译，时间比较久远，没有 Hook 的相关资料，就重新通过英文文档学习一遍。
+至于 Redux，以前学 React 的时候，就感受到 Redux 的难度和复杂，而且先接触了 Vuex 再接触 Redux，就更感觉 Redux 配置的复杂~~又抽象~~，中文文档也大多是个人翻译，时间比较久远，没有 Hook 的相关资料，就重新通过英文文档学习一遍。
 
 ## 单向数据流
 
@@ -29,14 +29,14 @@ Vuex 相较于 Redux，放弃了 action 的概念，并增加了异步修改 sta
 - state：单一状态树，模块化的多个模块都储存在同一个 store 实例上
 - getter：根据 state 的数据派生出的新的数据，并在依赖的相应数据变化前缓存
 - mutation：改变 state 的唯一方法，有多个 mutaion 可使用，只支持同步，并且在 mutation 中直接对原 state 进行更新，由 Vuex 来通知更新
-- action：能够异步的调用 mutation，并能在业务层中抛出 promise，继续进行链式的操作
+- action：能够异步的调用 mutation，并能抛出 promise，在业务层中继续进行链式的操作
 
 ### Redux
 
-Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护一个 react-redux 来实现 React 与 Redux 交互
+Redux 是一个在 js 中通用的状态管理工具，并由 Redux 官方维护一个 React-Redux 来实现 React 与 Redux 交互。
 
 - state：一个应用中只有一个 store 实例，数据不可变
-- action：一个用来描述 state 变化的 event（_其实就是个普通的 js 对象_）
+- action：一个用来描述 state 变化的 抽象概念（_其实就是个普通的 js 对象_）
 - reducer：改变 state 的唯一方法，且唯一，必须为纯函数，判断 action 对应的字段。Redux 推崇数据不可变，每次 reducer 都是返回一个新的 state
 
 ### 简单总结
@@ -92,7 +92,7 @@ mutations: {
 
 Vuex 的初始化比较简单，state 存储数据，mutations 同步修改 state，actions 异步 commit 调用 mutation。  
 在 mutation 中，state 也是沿袭 Vue 的响应式，可以对原 state 进行修改。  
-由于在 commit 中是以字符串的形式来调用 mutation，也导致了 Vuex 对于 ts 的不友好。
+由于在 commit 中是以字符串的形式来调用 mutation，也导致了 Vuex 对于 ts 以及 IDE 跳转的不友好。
 
 ### Redux
 
@@ -125,12 +125,14 @@ const store = createStore(reducer, state, middleware)
 一个最简单的 Redux 实例，通过 createStore 将 reducer 和 state 组合在一起。  
 因为 Redux 的数据不可变思想，reducer 作为一个纯函数，需要返回一个全新的 state 对象，对原 state 进行替换。  
 关于 Redux 的 action，个人感觉是个非常抽象的概念，按照 Redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
-在代码中，action 就是一个 `{ type, payload }` 的对象，在 reducer 对 action 的 type 进行判断，最后对 state 做出相应的修改。  
+在代码中，action 就是一个 `{ type, payload }` 的对象，在 reducer 对 action 的 type 进行判断，最后对 state 做出相应的修改。
+
 因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 Redux 当作 localStorage 来用了。。  
 把 action 对象 `{ type, payload }` 当成 `key: value` 来传值，Redux 就只剩下 state，getter，setter 这三个概念 😅
 
 ```js
 const reducer = (state, { type, payload }) => {
+  // 返回旧 state，并让 state.type 等于 payload
   return { ...state, [type]: payload }
 }
 ```
@@ -152,11 +154,11 @@ export default {
     const store = useStore()
 
     function add() {
-      this.$store.commit('changeCount', this.$store.state.count + 666)
+      store.commit('changeCount', store.state.count + 666)
     }
 
     function reset() {
-      this.$store.dispatch('login').then(() => {
+      store.dispatch('login').then(() => {
         // ...
       })
     }
@@ -215,6 +217,8 @@ export function useMySelector<T = any>(fn: (state: State) => T) {
 }
 ```
 
+封装之后，括号中能够得到具体的 state 类型，也能够根据 state 的类型推断出具体获取的数据的类型。
+
 ### React HOC
 
 ```tsx
@@ -239,11 +243,12 @@ export default connect((state: State) => {
 })(ReduxB)
 ```
 
-React 在业务层中的使用，主要是通过 `connect` 包裹或者 `useSelector` 来传递具体的 state 值。修改 state 需要通过往 dispatch 中传入相应的 action，通知 reducer 对 state 做具体的修改。
+React 在业务层中的使用，主要是通过 `connect` 包裹或者 `useSelector` 来传递具体的 state 值。修改 state 可以通过往 dispatch 中传入相应的 action，通知 reducer 对 state 做具体的修改。
 
 ### 简单总结
 
-在具体业务中的使用，Redux 和 Vuex 的区别可以说就是 React 和 Vue 的区别，React 通过 hook 或者 HOC 来获取 state 和修改 state 的方法，Vue 则通过 this 来获取获取 state 和修改 state 的方法。
+在具体业务中的使用，Redux 和 Vuex 的区别可以说就是 React 和 Vue 的区别，React 通过 hook 或者 HOC 来获取 state 和修改 state 的方法。  
+Vue 则通过 this 来获取获取 state 和修改 state 的方法，在 Vue 3 的 setup 中 可以也通过 hook，获取到与 this 上相同的 store 对象。
 
 由于 Vuex 是对 Vue 进行特化的状态管理工具，就可以通过全局插件的形式，注入到 Vue 的根实例中，使得 store 能在所有组件的 this 中获取到。
 
@@ -381,7 +386,7 @@ export const counterSlice = createSlice({
 ```
 
 可以明显地看到 createSlice 中的 reducers 不仅没有一句 `switch`，并且还直接修改了 state 的值。  
-这就是 Redux Toolkit 最明显的一个变化，它弱化了 Redux 中原来的 action 概念，将 action 原来的功能与 reducer 进行了合并， 并且可以在 reducer 中对 state 进行直接的修改，由 Redux Toolkit 内部来进行数据不可变的操作。
+这就是 Redux Toolkit 最明显的一个变化，它弱化了 Redux 中原来的 action 概念，将 action 原来的功能与 reducer 进行了融合， 并且可以在 reducer 中对 state 进行直接的修改，由 Redux Toolkit 内部来保持数据不可变的操作。
 
 ### store 的建立
 
@@ -519,7 +524,7 @@ extraReducers: {
 
 ## 最后总结
 
-Redux Toolkit 在创建 store 的层面上，将 action 的概念去除，将原来只存在一个 reducer ，在 reducer 中进行 switch、case 的概念，转化为多个 reducer，并且在 reducer 中允许了可变数据的写法。
+Redux Toolkit 在创建 store 的层面上，将 action 的概念去除，将原来只在一个 reducer 中进行 switch、case 的概念，转化为多个 reducer，并且在 reducer 中改为可变数据的写法。
 
 在本人看来，这些变化使得 Redux 的最佳实践与 Vuex 十分的相似，相同的 state，reducer 对应 mutation，都采用可变数据的写法，只有细微的 api 命名之间的区别。  
 对于新人，无需再为 action 和 reducer 中的 switch 而头晕，大大的降低了 Redux 的理解和入门门槛。  
@@ -527,5 +532,8 @@ Redux Toolkit 在创建 store 的层面上，将 action 的概念去除，将原
 
 在具体业务中的使用，Redux Toolkit 最大的改进，就是将原来的 action 对象替换为了方法，极大的提升了跳转至定义的便利性。
 
-尽管通过 Redux Toolkit 的封装，Redux 的用法变得与 Vuex 更加相似，但 Redux 和 Redux Toolkit 仍然有着比 Vuex 更高的扩展性。  
-面对复杂业务，Redux 和 Redux Toolkit 仍然提供了很多的 api 供用户进行自定义扩展，社区也有许多的中间件可以进行自行组合。不像 Vuex，~~只会心疼 giegie~~只有文档上基本的用法和 plugin 传出一个简单的钩子。
+尽管通过 Redux Toolkit 的封装，Redux 的用法变得与 Vuex 更加相似，更加的易于上手，但 Redux 和 Redux Toolkit 仍然有着比 Vuex 更高的扩展性。  
+面对复杂业务，Redux 和 Redux Toolkit 仍然提供了很多的 api 供用户进行自定义扩展，社区也有许多的中间件可以进行自行组合。不像 Vuex，~~只会心疼 giegie~~只有文档上基本的用法和较为简单的 plugin 钩子。  
+当然对于大多数人来说，一个标准的 Vuex 或者一个 createSlice 就足以应付几乎所有的场景了。
+
+关于状态管理，俗话说得好 [You Might Not Need Redux](https://medium.com/@dan_abramov/you-might-not-need-redux-be46360cf367) 。但鉴于目前找工作默认熟练使用全家桶的环境，Redux Toolkit 和 Vuex 还是多少能够降低一些门槛，为入门提供便利的。
