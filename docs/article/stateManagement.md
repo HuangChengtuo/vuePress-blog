@@ -127,7 +127,7 @@ const store = createStore(reducer, state, middleware)
 关于 Redux 的 action，个人感觉是个非常抽象的概念，按照 Redux 的意思，action 是一个用来告知 reducer 应该如何操作 store 的对象。  
 在代码中，action 就是一个 `{ type, payload }` 的对象，在 reducer 对 action 的 type 进行判断，最后对 state 做出相应的修改。
 
-因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 Redux 当作 localStorage 来用了。。  
+因为这层 action，可能会让很多人在入门 Redux 的时候难以理解，也可能产生许多与 Redux 思想不同的写法，比如像我一样直接把 Redux 当作 localStorage 来用。。  
 把 action 对象 `{ type, payload }` 当成 `key: value` 来传值，Redux 就只剩下 state，getter，setter 这三个概念 😅
 
 ```js
@@ -135,6 +135,8 @@ const reducer = (state, { type, payload }) => {
   // 返回旧 state，并让 state.type 等于 payload
   return { ...state, [type]: payload }
 }
+
+dispatch({ type: 'count', payload: count + 1 })
 ```
 
 ## 业务层使用的比较
