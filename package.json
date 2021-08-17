@@ -4,7 +4,7 @@
   "description": "",
   "author": "hct",
   "license": "ISC",
-  "homepage": "https://huangchengtuo.github.io/vuePress-blog/",
+  "homepage": "http://blog.huangchengtuo.com",
   "scripts": {
     "dev": "vuepress dev docs",
     "build": "vuepress build docs"
