@@ -23,7 +23,8 @@ module.exports = {
       '/note/': ['', 'browser', 'css', 'js', 'react', 'ts'],
       '/resume/': ['/resume'],
       '/article/anime': ['/article/anime'],
-      '/article/stateManagement': ['/article/stateManagement']
+      '/article/stateManagement': ['/article/stateManagement'],
+      '/article/swiper': ['/article/swiper']
     },
     sidebarDepth: 2,
     smoothScroll: true
