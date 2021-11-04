@@ -202,7 +202,7 @@ export default function Swiper() {
 }
 ```
 
-接下来，就只需要根据实际的业务，替换真实的图片，添加定时器，根据 ui 调整卡片的位置
+接下来，就只需要根据实际的业务，替换真实的图片，添加定时器，根据 ui 调整卡片的位置，就完成了 ✌️
 
 ### transform 优化
 
@@ -220,9 +220,44 @@ export default function Swiper() {
 
 ## 白给时刻
 
-项目上线之后，我不知是在哪里看到这样一段代码 `arr.push(arr.shift())`。  
+项目上线之后，我不知是在哪里看到这样一段代码 `arr.push(arr.shift())`，完美的实现了循环的功能，只需要简单的改造一下 `getClass`、`next`、`prev` 方法，就能完美过渡。
+
+```ts
+const [arr, setArr] = useState([1, 2, 3, 4, 5, 6])
+
+function getClass(node: string) {
+  let position = ''
+  if (node === arr[0]) {
+    position = 'll'
+  }
+  if (node === arr[1]) {
+    position = 'l'
+  }
+  if (node === arr[2]) {
+    position = 'c'
+  }
+  if (node === arr[3]) {
+    position = 'r'
+  }
+  if (node === arr[4]) {
+    position = 'rr'
+  }
+  return 'card ' + position
+}
+
+function prev() {
+  const temp = [...arr]
+  temp.unshift(temp.pop())
+  setArr(temp)
+}
+
+function next() {
+  const temp = [...arr]
+  temp.push(temp.shift())
+  setArr(temp)
+}
+```
+
 看到这简短的将头塞到尾的骚操作，我不禁感叹，**早知道，还是数组**
 
 ![diff](https://s1.huangchengtuo.com/img/211103yuandao.gif)
-
-## 总结
