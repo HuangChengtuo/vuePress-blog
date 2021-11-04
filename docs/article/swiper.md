@@ -204,7 +204,7 @@ export default function Swiper() {
 
 接下来，就只需要根据实际的业务，替换真实的图片，添加定时器，根据 ui 调整卡片的位置，就完成了 ✌️
 
-### transform 优化
+## transform 优化
 
 项目一开始，是通过绝对定位的 left 属性来实现卡片位置的区别的，直到看到一篇有关 css 性能优化的 [文章](https://zhuanlan.zhihu.com/p/78230297)
 
