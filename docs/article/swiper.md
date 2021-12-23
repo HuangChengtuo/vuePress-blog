@@ -202,6 +202,8 @@ export default function Swiper() {
 }
 ```
 
+![效果](https://s1.huangchengtuo.com/img/211102swiper.gif)
+
 接下来，就只需要根据实际的业务，替换真实的图片，添加定时器，根据 ui 调整卡片的位置，就完成了 ✌️
 
 ## transform 优化
@@ -220,7 +222,14 @@ export default function Swiper() {
 
 ## 白给时刻
 
-项目上线之后，我不知是在哪里看到这样一段代码 `arr.push(arr.shift())`，完美的实现了循环的功能，只需要简单的改造一下 `getClass`、`next`、`prev` 方法，就能完美过渡。
+项目上线之后，我不知是在哪里看到这样一段代码
+
+```js
+arr.push(arr.shift())
+arr.unshift(arr.pop())
+```
+
+在一瞬间将头部弹出的直接塞回尾部，尾部弹出的塞回头部，数组的这般骚操作，完美的实现了循环的功能，只需要简单的改造一下 `getClass`、`next`、`prev` 方法，就能完美过渡。
 
 ```ts
 const [arr, setArr] = useState([1, 2, 3, 4, 5, 6])
