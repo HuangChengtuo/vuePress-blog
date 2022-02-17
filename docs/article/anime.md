@@ -1,4 +1,4 @@
-# 鼠标滚轮翻页效果
+# 拦截鼠标滚轮翻页效果
 
 以前的个人网站是用 VuePress 的 beta 版搭建的，当时还挺新鲜，放到现在感觉已经烂大街了，以后面试也捞不到好处，决定重新写一个。  
 想在自己的网站上实现一个劫持鼠标滚轮，进行翻页的效果，记录一下踩坑之路。  
@@ -9,11 +9,10 @@
 
 ## 静态页面布局
 
-要实现 banner 图片不跟随内容滚动，只需要一个非常简单的 css 属性 `background-attachment` 就能实现，可以看到我们[数栈前端](http://dtux.dtstack.com/)网站也使用了这种属性。  
+要实现 banner 图片不跟随内容滚动，只需要一个非常简单的 css 属性 `background-attachment` 就能实现，可以看到我们[数栈前端](http://dtux.dtstack.com/)的网站也使用了这种属性。  
 当然也可以直接在 img 标签上通过 `posistion` 属性来固定，但是需要设置其他如 `margin`、`z-index` 各种属性，还是不太方便。
 
 ```html
-<!-- demo -->
 <div class="banner"></div>
 <div style="height: 100vh;"></div>
 
@@ -59,7 +58,8 @@ function scrollFn(e) {
 
 ## 第一次尝试：scroll-behavior: smooth
 
-使用 css 属性 `scroll-behavior: smooth` 是最方便最简单的，效果也比第二次要好很多，但是 mac 上 safari 不支持这一特性，ios 上的 safari 却又支持。。
+使用 css 属性 `scroll-behavior: smooth` 是最方便最简单的，效果也比第二次要好很多，但是 mac 上 safari 不支持这一特性，ios 上的 safari 却又支持。。  
+[can I use](https://caniuse.com/css-scroll-behavior)
 
 ```ts
 function scrollFn(e: WheelEvent) {
@@ -112,7 +112,7 @@ function scrollFn(e: WheelEvent) {
 
 ## 第三次尝试：添加缓动函数
 
-在搜索引擎里一顿查，可大多都是数学题和 canvas，还有好多都是关于贝塞尔曲线的解析，难度还是有点高的嗷 😅  
+在搜索引擎里一顿查，可大多都是数学题和 canvas，还有好多都是关于贝塞尔曲线的解析，用来平滑曲线，难度还是有点高的嗷 😅  
 在我以为只能放弃自己手写，借助 npm 的力量时，最后在一堆数学题里翻出来 [这个网站](https://easings.net/cn)，救我 🐶 命。
 
 > 现实生活中，物体并不是突然启动或者停止，当然也不可能一直保持匀速移动。就像我们打开抽屉的过程那样，刚开始拉的那一下动作很快，但是当抽屉被拉出来之后我们会不自觉的放慢动作。掉落在地板上的东西，一开始下降的速度很快，后来就会在地板上来回反弹直到停止。
