@@ -1,6 +1,6 @@
 <template>
   <p id="custom-action">
-    <a href="http://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
+    <a href="https://www.huangchengtuo.com" class="nav-link action-button">回到首页</a>
     <router-link to="/article" class="nav-link action-button">进入文章 →</router-link>
   </p>
 </template>

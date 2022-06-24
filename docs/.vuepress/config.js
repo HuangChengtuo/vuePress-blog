@@ -5,7 +5,7 @@ module.exports = {
   head: [['link', { rel: 'icon', href: '/logo.png' }]],
   themeConfig: {
     nav: [
-      { text: '首页', link: 'http://www.huangchengtuo.com', target: '_self' },
+      { text: '首页', link: 'https://www.huangchengtuo.com', target: '_self' },
       { text: '文章', link: '/article/' },
       { text: '笔记', link: '/note/' },
       { text: '个人简历', link: '/resume.md' },

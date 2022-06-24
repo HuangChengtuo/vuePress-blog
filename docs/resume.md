@@ -7,7 +7,7 @@
 * 黄诚拓，2020 届本科，男，1997. 10
 * 手机：18958817571
 * 邮箱：564117373@qq.com
-* [个人网站](http://www.huangchengtuo.com)
+* [个人网站](https://www.huangchengtuo.com)
 * [PDF下载](https://s1.huangchengtuo.com/pdf/黄诚拓前端简历.pdf)
 
 ## 技能
@@ -53,7 +53,7 @@
 每日一题 [Gitee](https://gitee.com/HuangChengtuo/leet-code)
 
 **个人网站**  
-基于 Nuxt、TypeScript 搭建的 [个人网站](http://www.huangchengtuo.com)
+基于 Nuxt、TypeScript 搭建的 [个人网站](https://www.huangchengtuo.com)
 
 **个人博客**  
 基于 VuePress 搭建的 [个人博客](/)
