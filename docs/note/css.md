@@ -3,7 +3,7 @@
 ## position
 
 | 属性值 | 描述 |
-|---|---|
+| --- | --- |
 | absolute | 绝对定位，脱离文档流，与外部元素影响，相对于 static 以外第一个父元素 |
 | fixed | 绝对定位，脱离文档流与外部元素影响，相对于浏览器窗口 |
 | relative | 相对定位，相对于正常位置 |
@@ -50,11 +50,11 @@
     margin: 0 auto;
     vertical-align: middle;
 
-    display: block;
+    display: flex;
     justify-content: center;
     align-items: center;
 
-    /*posistion ...*/
+    /* posistion... */
 }
 
 ```
