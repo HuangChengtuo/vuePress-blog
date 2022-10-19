@@ -24,7 +24,8 @@ module.exports = {
       '/resume/': ['/resume'],
       '/article/anime': ['/article/anime'],
       '/article/stateManagement': ['/article/stateManagement'],
-      '/article/swiper': ['/article/swiper']
+      '/article/swiper': ['/article/swiper'],
+      '/article/reactivity': ['/article/reactivity']
     },
     sidebarDepth: 2,
     smoothScroll: true
