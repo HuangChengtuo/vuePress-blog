@@ -393,7 +393,7 @@ console.log(obj, reactiveObj)
 
 obj === reactiveObj // ??
 
-arr.include(obj) // ??
+arr.includes(obj) // ??
 ```
 
 当我们把一个 obj 放入 reactive 过的数组中再取出来，得到的就是经过 proxy 包裹的响应式对象。
