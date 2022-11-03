@@ -26,6 +26,8 @@ Vue 和 React 的一大区别，就是响应式数据的区别。
 </template>
 
 <script setup lang="ts">
+import { ref, computed } from 'vue'
+
 const price = ref(5)
 const quantity = ref(2)
 const total = computed(() => price.value * quantity.value)
