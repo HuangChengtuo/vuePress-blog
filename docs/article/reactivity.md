@@ -3,7 +3,14 @@
 Vue 和 React 的一大区别，就是响应式数据的区别。  
 在 React 中，想要触发相关依赖数据和页面的更新，需要手动地去调用 set 函数，通知 React 来进行一个响应式的更新。  
 而在 Vue 中，只需要修改数据，Vue 就能够自动得追踪数据的变化，自动得对相关依赖数据和页面进行更新。
- 
+
+## 观前防杠
+
+[BV1SZ4y1x7a9](https://www.bilibili.com/video/BV1SZ4y1x7a9)  
+[Vue Mastery](https://www.vuemastery.com/courses/vue-3-reactivity/vue3-reactivity)
+
+本文只是对该课程所进行的一个~~错误的~~，间接的，庸俗的，主观的，残缺的，平面的，片面的，粗略的，浅显的，简单的有损压缩，总结的一份个人学习笔记。看完文章如对 Vue3 产生了稍微的兴趣和理解和疑问，欢迎大家前去原视频进行观摩学习，课程的最后还有尤雨溪大佬会一起进行一些 QA 和源码的解读。
+
 ## 简单的 Vue
 
 首先我们来看一个简单的 Vue 的基本模版，可以看到当我们对 quantity 进行修改之时，total 能够响应式的变更。
@@ -415,9 +422,4 @@ proxy 对于新增的属性能够做到自动追踪，defineProperty 就只能�
 
 ## 结尾引流
 
-[BV1SZ4y1x7a9](https://www.bilibili.com/video/BV1SZ4y1x7a9)  
-[Vue Mastery](https://www.vuemastery.com/courses/vue-3-reactivity/vue3-reactivity)
-
-本文只是对该课程所进行的一个~~错误的~~，间接的，庸俗的，主观的，残缺的，平面的，片面的，粗略的，浅显的，简单的有损压缩，总结的一份个人学习笔记。看完文章如对 Vue3 产生了稍微的兴趣和理解和疑问，欢迎大家前去原视频进行观摩学习，课程的最后还有尤雨溪大佬会一起进行一些 QA 和源码的解读。 
-
-通过本文大家应该能够对 Vue3 的响应式原理产生或多或少一定的了解，如果有兴趣，各位还能继续通过[《跟尤雨溪一起解读Vue3源码》](https://www.bilibili.com/video/BV1rC4y187Vw)课程，继续和尤大一起完成一个简单的 vue（还能看到尤大手写代码时，写出低级错误后当场 debug 的有趣名场面 😆），欢迎大家去点赞投币收藏一键三连。
+通过本文，希望大家能够对 Vue3 的响应式原理产生或多或少一定的了解，如果有兴趣，各位还能继续通过[《跟尤雨溪一起解读Vue3源码》](https://www.bilibili.com/video/BV1rC4y187Vw)课程，继续和尤大一起完成一个简单的 vue（还能看到尤大手写代码时，写出低级错误后当场 debug 的有趣名场面 😆），欢迎大家去点赞投币收藏一键三连。
