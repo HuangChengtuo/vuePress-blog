@@ -8,6 +8,7 @@ Vue2 的 options 和 Vue3 的 composition，对应了 React16.8- 的 class 和 R
 composition 风格，作为 Vue3 的最重磅功能，在刚发布时却是以一种缝合怪的风格，嵌入进原先的 options 写法里，着实让人不习惯，在一开始的风评也没有现在这样。
 
 ```vue
+
 <script>
 export default {
   data () {
@@ -65,6 +66,7 @@ class Component extends React.Component {
 直到 Vue3.2，单文件组件更新了 script setup 的语法，使得 options 和 composition 能彻底分离。
 
 ```vue
+
 <template>
   <button @click="count++">{{ count }}</button>
 </template>
@@ -89,11 +91,12 @@ watch(count, (newValue, oldValue) => {})
 
 ## 对比
 
-和 React 的 function hooks 写法对比一下，可以发现很多的相似之处，除了 Vue 三分离和 React 的 jsx 这一大区别，在 js 部分，可以看到两者有很多的相同之处。  
+和 React 的 function hooks 写法对比一下，可以发现很多的相似之处，除了 Vue 三分离和 React 的 jsx 这一大区别，在 js 部分，可以看到两者有很多的相同之处。
 
 ### props
 
-React 的 props，只需要简单的定义函数的入参即可，非常方便，Vue 则是需要区分对象和方法
+React 的 props，只需要简单的定义函数的入参即可，非常方便，Vue 则是需要区分对象和方法。  
+通过使用 script setup，Vue 能够与 React 一样在 ide 上直接组件使用处标记缺少的 props 属性与提示。
 
 ```ts
 // Vue
@@ -128,7 +131,7 @@ setCount(count++)
 console.log(count) // old 🤔️
 ```
 
-### 副作用函数
+### 生命周期和副作用函数
 
 React 将 mounted、watch、unmount 等功能全部整合进了 useEffect，Vue 则区分了这几个函数。
 
@@ -147,3 +150,13 @@ useEffect(() => {
 }, [])
 useMemo(() => {}, [])
 ```
+
+## 总结
+
+从一开始的 options 和 class，Vue 和 React 就有相同的 this，到 setup 和 function hooks ，Vue 和 React 又有了相同概念的 hooks。  
+对于已经学会一种框架的人，熟悉另一个的难度变得越来越低。  
+对于新人在 Vue 和 React 的选择上，写法的差异已经变得越来越不重要，更多的是
+
+* 三剑客分离和 jsx all in one 的区别
+* 响应式数据直接修改，由代理拦截自动追踪进行响应式更新，响应式数据不可修改，手动通知进行响应式更新
+* 周边生态，全家桶的选择
