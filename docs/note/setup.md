@@ -92,6 +92,108 @@ watch(count, (newValue, oldValue) => {})
 </script>
 ```
 
+## 与 Vue3.1 以及 Vue2 的对比
+
+### import
+
+在 Vue3.2 之前，所有 import 进来的东西，仍然需要在 options 中注册后，才能在 html 中获取到，在 Vue3.2 的 script setup 的代码块中，所有顶层的 import 都会自动暴露给模版。
+```vue
+
+<template>
+  <div>{{ formatDate(data) }}</div>
+  <CustomComponent />
+</template>
+
+// Vue2 & Vue3.1
+<script>
+import { formatDate } from '@/utils'
+import CustomComponent from '...'
+
+export default {
+  components: { CustomComponent },
+  setup () {
+    // Vue3.1
+    return { formatDate }
+  },
+  // Vue2
+  methods: {
+    formatDate,
+    fn () {}
+  }
+}
+</script>
+
+// Vue3.2
+<script setup>
+import { formatDate } from '@/utils'
+import CustomComponent from '...'
+</script>
+```
+
+### 钩子
+
+Vue3 将原先声明式的生命周期改为了钩子函数，做到了逻辑点分离，能够在相对零散的各个逻辑附近多次调用声明周期
+
+```vue
+// Vue2
+<script>
+export default {
+  data () {
+    return {
+      tableData: [],
+      page: 1,
+      loading: false,
+      animeDom: null,
+      animeConfig: {}
+    }
+  },
+  mounted () {
+    this.getTableData()
+    this.startAnime()
+  },
+  watch: {
+    animeConfig () {},
+    page () {}
+  },
+  unmounted () {
+    this.stopAnime()
+  },
+  methods: {
+    // 若干行
+    getTableData () {},
+    // 若干行
+    startAnime () {},
+    stopAnime () {}
+  }
+}
+</script>
+
+// Vue3
+<script setup>
+import { ref } from 'vue'
+
+const tableData = ref([])
+const loading = ref([])
+onMounted(() => {
+  // getTableData logic
+})
+// 若干行
+const animeDom = ref(null)
+const animeConfig = ref({})
+onMounted(() => {
+  // startAnime logic
+})
+onUnmounted(() => {
+  // stopAnime logic
+})
+
+watch(animeConfig,()=>{
+  // restart
+})
+
+</script>
+```
+
 ## 与 React 的对比
 
 和 React 的 function hooks 写法对比一下，可以发现很多的相似之处，除了 Vue 三分离和 React 的 jsx 这一大区别，在很多方面都可以看到这两种写法的大大小小的异同。
