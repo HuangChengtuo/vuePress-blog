@@ -13,6 +13,7 @@ Vue2 的 options 对应了 React16.8 以下的 class，Vue3 的 composition 对�
 composition 风格，作为 Vue3 的最重磅功能，在刚发布时却是以一种别扭的方法，缝合入进原先的 options 写法里，着实让人不习惯。
 
 ```vue
+
 <script>
 export default {
   data () {
@@ -70,6 +71,7 @@ class Component extends React.Component {
 直到 Vue3.2，单文件组件更新了 script setup 的语法，使得 options 和 composition 能彻底分离。
 
 ```vue
+
 <template>
   <button @click="count++">{{ count }}</button>
 </template>
@@ -94,45 +96,9 @@ watch(count, (newValue, oldValue) => {})
 
 ## 与 Vue3.1 以及 Vue2 的对比
 
-### import
+### hooks
 
-在 Vue3.2 之前，所有 import 进来的东西，仍然需要在 options 中注册后，才能在 html 中获取到，在 Vue3.2 的 script setup 的代码块中，所有顶层的 import 都会自动暴露给模版。
-```vue
-
-<template>
-  <div>{{ formatDate(data) }}</div>
-  <CustomComponent />
-</template>
-
-// Vue2 & Vue3.1
-<script>
-import { formatDate } from '@/utils'
-import CustomComponent from '...'
-
-export default {
-  components: { CustomComponent },
-  setup () {
-    // Vue3.1
-    return { formatDate }
-  },
-  // Vue2
-  methods: {
-    formatDate,
-    fn () {}
-  }
-}
-</script>
-
-// Vue3.2
-<script setup>
-import { formatDate } from '@/utils'
-import CustomComponent from '...'
-</script>
-```
-
-### 钩子
-
-Vue3 将原先声明式的生命周期改为了钩子函数，做到了逻辑点分离，能够在相对零散的各个逻辑附近多次调用声明周期
+Vue3 将原先声明式的生命周期改为了钩子函数，做到了逻辑点分离，能够在相对零散的各个逻辑附近多次调用声明周期。
 
 ```vue
 // Vue2
@@ -187,11 +153,80 @@ onUnmounted(() => {
   // stopAnime logic
 })
 
-watch(animeConfig,()=>{
+watch(animeConfig, () => {
   // restart
 })
 
 </script>
+```
+
+### import & return
+
+在 Vue3.2 之前，所有 import 进来的东西，仍然需要在 options 中注册后，才能在 html 中获取到，在 Vue3.2 的 script setup 的代码块中，所有顶层的 import 都会自动暴露给模版。
+
+在 Vue3.1 的 setup 中，仍然需要将模版需要的响应式数据或者函数通过显式的 return 出来，在 Vue3.2 中所有顶层声明的东西，都可以自动暴露给模版使用。
+
+```vue
+
+<template>
+  <div>{{ formatDate(data) }}</div>
+  <CustomComponent />
+</template>
+
+// Vue2 & Vue3.1
+<script>
+import { formatDate } from '@/utils'
+import CustomComponent from '...'
+
+export default {
+  components: { CustomComponent },
+  setup () {
+    // Vue3.1
+    return { formatDate }
+  },
+  // Vue2
+  methods: {
+    formatDate,
+    fn () {}
+  }
+}
+</script>
+
+// Vue3.2
+<script setup>
+import { formatDate } from '@/utils'
+import CustomComponent from '...'
+</script>
+```
+
+### props
+
+在 Vue2 时期，props 的类型校验是通过 js 实现的基础类型简单校验，Vue3 则是通过使用 ts 进行重写，实现了 ts 支持。  
+Vue3.2 更是可以直接通过范型来约束 props 的类型。
+
+对于传递的函数方法，在 Vue3.1 之前都没有一个好的约束方法，直到 script setup 之后，才有了一个解决方法。
+
+```ts
+// Vue2
+export default {
+  props: {
+    count: Number,
+    text: String
+  }
+}
+
+// Vue3
+export default {
+  props: {
+    count: Number,
+    text: String
+  },
+  setup (props) {}
+}
+
+// Vue3.2
+const props = defineProps<{ count: number, text: string }>()
+const emit = defineEmits<{ (e: 'change', value: number): void }>()
 ```
 
 ## 与 React 的对比
@@ -254,7 +289,7 @@ React 的响应式数据，都是通过 useState 来声明，setState 来更新�
 > If you need to use the next state, you can save it in a variable before passing it to the set function:
 
 ```js
-const nextCount = count ++;
+const nextCount = count++;
 setCount(nextCount);
 
 console.log(count);     // 0
@@ -289,7 +324,7 @@ useMemo(() => {}, [])
 
 从一开始的 options 和 class，Vue 和 React 就有相同的 this，到 setup 和 function hooks ，Vue 和 React 又有了相同概念的 hooks。  
 对于已经学会一种框架的人，熟悉另一个的难度变得越来越低。  
-对于新人在 Vue 和 React 的选择上，js 写法上的差异已经变得越来越不重要，更多的是
+两个框架在都才用了 hooks 的理念后，js 的写法上的差异，变得越来越小。
 
 * 三剑客分离和 jsx all in one 的区别
 * 响应式数据直接修改，由代理拦截自动追踪进行响应式更新，响应式数据不可修改，手动通知进行响应式更新
