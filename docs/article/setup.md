@@ -1,11 +1,11 @@
-# Vue3 script setup 语法
+# Vue3.2 script setup 语法
 
 Vue3.2 已经发布有两年了，Vue3.0 更是已经发布三年了，配合着 Vite 的超快速度，吸引了一大波的热度。  
-随着最近 Nuxt3.0 的发布，以及 Vue 文档的全新改版，setup 语法组合式（composition）的地位已经正式盖过老 Vue2 的选项式（options）风格。
+随着 Nuxt3.0 的发布，以及最近 Vue 文档的全新改版，setup 语法组合式（composition）风格的地位已经正式超过老 Vue2 的选项式（options）风格。
 
 ![api风格](https://s1.huangchengtuo.com/img/230427codeStyle.png)
 
-## 3.2 以前的 setup
+## Vue3.2 以前的 setup
 
 现在的 Vue，已经发展出和 React 类似的两套写法风格。  
 Vue2 的 options 对应了 React16.8 以下的 class，Vue3 的 composition 对应了 React16.8 的 function hooks。
@@ -98,7 +98,9 @@ watch(count, (newValue, oldValue) => {})
 
 ### hooks
 
-Vue3 将原先声明式的生命周期改为了钩子函数，做到了逻辑点分离，能够在相对零散的各个逻辑附近多次调用声明周期。
+Vue3 将原先声明式的生命周期改为了钩子函数，能够在相对零散的各个逻辑附近多次调用声明周期，做到了关注点分离。
+
+![关注点分离](https://s1.huangchengtuo.com/img/230519focus.png)
 
 ```vue
 // Vue2
@@ -134,7 +136,7 @@ export default {
 }
 </script>
 
-// Vue3
+// Vue3.2
 <script setup>
 import { ref } from 'vue'
 
@@ -158,6 +160,24 @@ watch(animeConfig, () => {
 })
 
 </script>
+
+// Vue3.1
+<script>
+export default {
+  setup () {
+    // ...
+    return {
+      tableData,
+      loading,
+      animeDom,
+      animeConfig,
+      getTableData,
+      startAnime,
+      stopAnime
+    }
+  }
+}
+</script>
 ```
 
 ### import & return
@@ -169,7 +189,7 @@ watch(animeConfig, () => {
 ```vue
 
 <template>
-  <div>{{ formatDate(data) }}</div>
+  <div>{{ formatDate(unix) }}</div>
   <CustomComponent />
 </template>
 
@@ -180,9 +200,15 @@ import CustomComponent from '...'
 
 export default {
   components: { CustomComponent },
+  data () {
+    return {
+      unix: 123456
+    }
+  },
+  // Vue3.1
   setup () {
-    // Vue3.1
-    return { formatDate }
+    const unix = ref(123456)
+    return { formatDate, unix }
   },
   // Vue2
   methods: {
@@ -196,6 +222,8 @@ export default {
 <script setup>
 import { formatDate } from '@/utils'
 import CustomComponent from '...'
+
+const unix = ref(123456)
 </script>
 ```
 

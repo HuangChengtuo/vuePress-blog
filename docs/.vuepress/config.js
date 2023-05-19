@@ -25,7 +25,8 @@ module.exports = {
       '/article/anime': ['/article/anime'],
       '/article/stateManagement': ['/article/stateManagement'],
       '/article/swiper': ['/article/swiper'],
-      '/article/reactivity': ['/article/reactivity']
+      '/article/reactivity': ['/article/reactivity'],
+      '/article/setup': ['/article/setup']
     },
     sidebarDepth: 2,
     smoothScroll: true
