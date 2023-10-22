@@ -118,3 +118,6 @@ stopPropagation 阻止冒泡
 
 target：点击的元素  
 currentTarget：触发的元素
+
+<!-- TODO -->
+## 事件委托 + DocumentFragment 优化大量节点

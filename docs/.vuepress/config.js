@@ -26,7 +26,8 @@ module.exports = {
       '/article/stateManagement': ['/article/stateManagement'],
       '/article/swiper': ['/article/swiper'],
       '/article/reactivity': ['/article/reactivity'],
-      '/article/setup': ['/article/setup']
+      '/article/setup': ['/article/setup'],
+      '/article/nginx': ['/article/nginx']
     },
     sidebarDepth: 2,
     smoothScroll: true
