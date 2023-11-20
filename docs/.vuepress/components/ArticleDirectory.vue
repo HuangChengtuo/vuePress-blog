@@ -16,7 +16,7 @@ export default {
         { label: '循环链表在业务中的一次实际应用', link: 'swiper' },
         { label: 'Vue3 Reactivity 响应式原理', link: 'reactivity' },
         { label: 'Vue3.2 script setup 语法', link: 'setup' },
-        { label: 'nginx 301 问题解析', link: 'nginx' }
+        // { label: 'nginx 301 问题解析', link: 'nginx' }
       ]
     }
   }
