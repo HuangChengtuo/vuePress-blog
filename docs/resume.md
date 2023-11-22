@@ -7,16 +7,16 @@
 - 黄诚拓，2020 届本科，男，1997. 10
 - 手机：18958817571
 - 邮箱：564117373@qq.com
-- [简历 PDF 下载](https://s1.huangchengtuo.com/pdf/黄诚拓前端简历.pdf)
+- [PDF 下载](https://s1.huangchengtuo.com/pdf/黄诚拓前端简历2023.pdf)
 - [个人网站](https://www.huangchengtuo.com)
 
 ## 技能
 
-- 熟练使用 Nuxt、Next 进行服务端渲染、实现中间件
+- 使用 Nuxt、Next 进行服务端渲染、实现中间件
 - 熟悉 React、Vue 全家桶，手写实现过简单 Vue3
-- 熟悉浏览器基本原理以及 TypeScript、ESNext 的各种新标准新特性
-- 熟练使用 Node.js、Docker、nginx 进行前端线上部署，mock、代理接口
-- 熟悉小程序，熟练使用 mpvue、原生开发小程序，小程序 web-view 页面开发
+- 了解浏览器基本原理以及 ESNext、TypeScript 的新标准新特性
+- 使用 Node.js、Docker、nginx 进行线上部署，mock、代理接口
+- 了解小程序，熟练使用 mpvue、原生开发小程序，小程序 web-view 页面开发
 - 熟练使用 Git、ESLint、monorepo 进行团队开发合作
 
 ## 工作经历
@@ -24,15 +24,34 @@
 **袋鼠云 - 杭州玳数科技有限公司** - _前端开发_  
 2021 年 5 月 - 2023 年 10 月，杭州
 
-- 担任 emr、clickhouse 产品技术负责人
-- 参与大数据开发治理平台的版本迭代开发
-- 参与公司基建项目、开源项目 [dt-utils](https://github.com/DTStack/dt-utils) 的开发
+emr、clickhouse 产品技术 owner
+
+- 负责前端项目从头搭建,设计产品权限点、路由结构、请求规范
+- 优化迭代工作流，配置 ESLint 规范代码，提高交付质量、减少 bug
+- 封装请求、组件、工具，完善类型配置，配置部署环境 Dockerfile、nginx
+- 使用后端密钥封装 CA 证书文件
+
+
+大数据开发治理平台版本迭代开发
+
+- 使用懒加载和虚拟滚动，实现超长日志展示
+- 对文件进行切片，并封装成 Promise，实现大文件分片上传
+- 基于 mxGraph 开发实时任务的血缘关系线路图
+- 参与公司 Web IDE 开发
+
+公司基建项目以及开源项目 [dt-utils](https://github.com/DTStack/dt-utils) 开发
+
+- 优化公司 IndexedDB 工具类，解决同名数据库建表问题
+- 完善单测用例、补充工具库文档、Typescript 类型描述
 
 **杭州壁虎畅游信息技术有限公司** - _前端开发_  
 2020 年 6 月 - 2021 年 5 月，杭州
 
-- [公司官网](https://www.bihukankan.com) 以及 [壁虎看看快手版](https://www.bihukankan.com/main) 产品线前端负责人
-- 基于 mpvue 打造 hybrid 小程序，通过小程序 web-view 混合展示内容
+[公司官网](https://www.bihukankan.com) 以及 [壁虎看看快手版](https://www.bihukankan.com/main) 产品线前端 owner
+
+- 对接支付宝、微信的支付 sdk
+- 使用双向循环链表实现首页可控轮播图
+- 通过小程序 web-view 混合展示内容，打造 hybrid 小程序
 
 <QRCode />
 
@@ -43,17 +62,14 @@
 - 参与开发 网约车运营管理平台、设备管理平台
 - 参与开发 微信公众号招募司机、推广页面
 
+## 教育背景
+
+**浙江中医药大学滨江学院，杭州** — _本科_  
+2016 年 - 2020 年
+
+计算机技术与科学
+
 ## 项目
-
-### 大数据开发治理 - 实时开发 StreamWorks
-
-`React` `TypeScript` `mxGraph` `Monorepo` `Monaco Editor`
-
-提供基于 Flink 的一站式大数据流处理开发平台，实现从数据采集、数据处理、任务监控运维的全链路覆盖
-
-- 基于 mxGraph 开发实时任务的血缘关系线路图
-- 基于 Monaco Editor、[Molecule](https://github.com/DTStack/molecule) 实现的 Web IDE，能够使用数据开发人员的支持 FlinkSQL 语法，并且支持预览历史提交任务代码 diff，实时运行展示控制台输出
-- 对大文件进行切片，并封装成 Promise，实现分片上传
 
 ### 个人网站
 
@@ -61,13 +77,6 @@
 
 - 拦截鼠标滚轮事件实现整页滚动
 - 使用双向循环链表实现轮播图
-
-## 教育背景
-
-**浙江中医药大学滨江学院，杭州** — _本科_  
-2016 年 - 2020 年
-
-计算机技术与科学
 
 ## 关于我
 
