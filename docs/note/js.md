@@ -14,12 +14,12 @@
 
 ![原型链](https://s1.huangchengtuo.com/img/0420prototype.png)
 
-* Object 是所有对象的爸爸，所有对象都可以通过 __proto__ 找到它
-* Function 是所有函数的爸爸，所有函数都可以通过 __proto__ 找到它
-* 对象的 __proto__ 属性指向原型， __proto__ 将对象和原型连接起来组成了原型链
-* js分为函数对象和普通对象，每个对象都有 __proto__ 属性，但是只有函数对象才有prototype属性
-* 函数的 prototype 是一个对象
-* 函数的prototype指向了一个对象，而这个对象正是调用构造函数时创建的实例的原型
+- Object 是所有对象的爸爸，所有对象都可以通过 **proto** 找到它
+- Function 是所有函数的爸爸，所有函数都可以通过 **proto** 找到它
+- 对象的 **proto** 属性指向原型， **proto** 将对象和原型连接起来组成了原型链
+- js 分为函数对象和普通对象，每个对象都有 **proto** 属性，但是只有函数对象才有 prototype 属性
+- 函数的 prototype 是一个对象
+- 函数的 prototype 指向了一个对象，而这个对象正是调用构造函数时创建的实例的原型
 
 ## 继承
 
@@ -31,11 +31,11 @@ prototype 的继承就是 js 的糟粕，能用 class 就用 class
 class Parent {
   constructor(name) {
     this.name = name
-    this.className = 'parent'
+    this.className = "parent"
   }
 
   toString() {
-    return 'my name is ' + this.name
+    return "my name is " + this.name
   }
 }
 
@@ -43,7 +43,7 @@ class Child extends Parent {
   constructor(name) {
     // 必须调用super
     super(name)
-    this.className = 'child'
+    this.className = "child"
   }
 }
 ```
@@ -67,14 +67,13 @@ function Child(name) {
 ```js
 function Parent(name) {
   this.name = name
-  this.className = 'parent'
+  this.className = "parent"
   this.toString = function () {
-    return 'I have no name'
+    return "I have no name"
   }
 }
 
-function Child(name) {
-}
+function Child(name) {}
 
 Child.prototype = new Parent()
 Child.prototype.constructor = Child
@@ -87,16 +86,16 @@ Child.prototype.constructor = Child
 ```js
 function Parent(name) {
   this.name = name
-  this.className = 'parent'
+  this.className = "parent"
   this.toString = function () {
-    return 'my name is ' + this.name
+    return "my name is " + this.name
   }
 }
 
 function Child(name) {
   // 调用第一遍
   Parent.apply(this, arguments)
-  this.className = 'child'
+  this.className = "child"
 }
 
 // 调用第二遍
@@ -110,7 +109,7 @@ Child.prototype.constructor = Child
 function extend(obj) {
   let clone = Object.create(obj)
   clone.toString = function () {
-    return 'I am child'
+    return "I am child"
   }
   return clone
 }
@@ -131,7 +130,36 @@ Child.prototype.constructor = Child
 
 ## new 对象的过程
 
-* 创建一个空对象
-* 让空对象的 _proto_ 指向构造函数的 prototype
-* 执行构造函数中的代码（为这个新对象添加属性）
-* 返回新对象  
+- 创建一个空对象
+- 让空对象的 _proto_ 指向构造函数的 prototype
+- 执行构造函数中的代码（为这个新对象添加属性）
+- 返回新对象
+
+## 暂时性死区
+
+```js
+console.log(num)
+var num = 1
+```
+
+等价于
+
+```
+var num
+console.log(num)
+num = 1
+```
+
+let 和 const 能生成暂时性死区，提前使用会抛出错误
+
+## 模块化 ESModule 和 CommonJS 比较
+
+动态导入：ES module 支持动态导入，也就是在代码运行时根据需要导入模块。而 CommonJS 不支持动态导入  
+作用域：ES module 的模块作用域是静态的，在模块中定义的变量和函数不会污染全局作用域。而 CommonJS 的模块作用域是动态的，模块中定义的变量和函数会被添加到全局作用域中  
+异步加载：ES module 可以异步加载模块，以提高性能和减少启动时间。而 CommonJS 只能同步加载模块，浏览器可以通过 webpack 打包来实现 CommonJS  
+兼容性：CommonJS 好  
+导入数量：CommonJS 只支持一个
+
+## 性能指标
+
+[来来来，前端性能监控，带你拿到正确的性能指标](https://juejin.cn/post/7223280402475089978)

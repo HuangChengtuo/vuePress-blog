@@ -10,14 +10,14 @@ jsx 文件就是实现`React.createElement()`的一个语法糖。
 ```ts
 // index.d.ts
 interface ReactElement<P = any, T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>> {
-  type: T;
-  props: P;
-  key: Key | null;
+  type: T
+  props: P
+  key: Key | null
 }
 
 // Playground.tsx
-const element: React.ReactElement = React.createElement('div', { className: 'test', id: 'unique' }, 'hello world')
-ReactDOM.render(element, document.getElementById('render-container'))
+const element: React.ReactElement = React.createElement("div", { className: "test", id: "unique" }, "hello world")
+ReactDOM.render(element, document.getElementById("render-container"))
 console.log(element)
 ```
 
@@ -26,10 +26,10 @@ console.log(element)
 `React.ReactNode` 是一种联合类型，并且继承了`React.ReactElement`
 
 ```ts
-type ReactText = string | number;
-type ReactChild = ReactElement | ReactText;
+type ReactText = string | number
+type ReactChild = ReactElement | ReactText
 // ...
-type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | undefined;
+type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | undefined
 ```
 
 `JSX.Element`就是通过继承`React.ReactNode`实现的，没有任何区别
@@ -47,20 +47,20 @@ TypeScript 一大作用就是为了提供精准的代码提示
 
 ```tsx
 // e implicitly has any type
-const onChange = e => {
+const onChange = (e) => {
   console.log(e?.target?.value)
 }
 // ...
-<Input onChange={onChange} />
+;<Input onChange={onChange} />
 ```
 
 这时就需要手动对方法的形参的类型进行标注
 
-* `Input.onChange(e: React.ChangeEvent<HTMLInputElement>)`
-* `Radio.Group.onChange(e: antd.RadioChangeEvent)`
-* `Checkbox.onChange(e: antd.CheckboxChangeEvent)`
-* `Button.onClick(e: React.MouseEvent)`
-* `Select.onChange(value: string, option:Option)`
+- `Input.onChange(e: React.ChangeEvent<HTMLInputElement>)`
+- `Radio.Group.onChange(e: antd.RadioChangeEvent)`
+- `Checkbox.onChange(e: antd.CheckboxChangeEvent)`
+- `Button.onClick(e: React.MouseEvent)`
+- `Select.onChange(value: string, option:Option)`
 
 ## React Router 的 Hooks 与 HOC 用法
 
@@ -72,13 +72,13 @@ const onChange = e => {
 
 React Router 从 v5.1.0 开始，新增了对 Hooks 的支持，并陆续添加了四个钩子函数
 
-* `useHistory`
-* `useLocation`
-* `useParams`
-* `useRouteMatch`
+- `useHistory`
+- `useLocation`
+- `useParams`
+- `useRouteMatch`
 
 ```jsx
-import { useHistory, useLocation, useParams } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from "react-router-dom"
 
 export default function Playground() {
   const router = useHistory()
@@ -88,7 +88,7 @@ export default function Playground() {
   const params = useParams()
 
   function jump() {
-    router.push('...')
+    router.push("...")
   }
 
   return <>...</>
@@ -106,30 +106,32 @@ useHistory 提供的方法，基本与 class 一致
 
 ```tsx
 // index.d.ts
-export interface RouteComponentProps<Params extends { [K in keyof Params]?: string } = {},
+export interface RouteComponentProps<
+  Params extends { [K in keyof Params]?: string } = {},
   C extends StaticContext = StaticContext,
-  S = H.LocationState> {
-  history: H.History<S>;
-  location: H.Location<S>;
-  match: match<Params>;
-  staticContext?: C;
+  S = H.LocationState
+> {
+  history: H.History<S>
+  location: H.Location<S>
+  match: match<Params>
+  staticContext?: C
 }
 
 // playground.tsx
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { withRouter, RouteComponentProps } from "react-router-dom"
 
 interface Props extends RouteComponentProps {
-  text: string,
+  text: string
   // ...
 }
 
 class BlockA extends React.Component<Props> {
-  constructor (props: Props) {
+  constructor(props: Props) {
     super(props)
     console.log(props)
   }
 
-  render () {
+  render() {
     return <div>block a</div>
   }
 }
@@ -138,27 +140,35 @@ const WithRouterBlockA = withRouter(BlockA)
 export default WithRouterBlockA
 ```
 
-## React Router v3 与 v4+ 区别
+## 区分 class 组件和 function 组件
 
-在 v4 以及之后的版本，router 被拆分出多个包，以对应浏览器和 app 的不同环境，且 api 变化巨大
+[How Does React Tell a Class from a Function?](https://overreacted.io/how-does-react-tell-a-class-from-a-function/)
 
-* react-router
-* react-router-dom
-* react-router-native
+### 为什么要区分
 
-在 v3 可以直接引入`hashHistory`或者`browserHistory`进行路由跳转，之后版本需要通过 hook 或者 HOC 进行路由参数的传递
+箭头函数的组件没有 this，new 会报错
 
-```jsx
-// v3.x
-import { hashHistory } from 'react-router'
+### 怎么区分
 
-hashHistory.push('/')
+class 组件 会继承 `React.Component`，`MyComponent instanceof React.Component`
+
+```js
+// Inside React
+class Component {}
+Component.prototype.isReactComponent = {}
+
+// We can check it like this
+class Greeting extends Component {}
+console.log(Greeting.prototype.isReactComponent)
 ```
 
-在 v3.x 中，只会对第一个匹配成功的 Route 进行渲染
+## fiber
 
-v4+ 对于没有包裹在 Switch 中的 Route 只要匹配上了就会进行渲染  
-所以 v4+ 新增了 Switch 标签，与 switch 语句类似，只会渲染 Switch 标签内第一个匹配的 Route 标签  
-像`<Route path="/*" component={NotFund} />`这种404页面就必需包裹在 Switch 中
+![tree](https://s1.huangchengtuo.com/img/231123tree.png)
 
-[React Router v4 几乎误我一生 - 知乎](https://zhuanlan.zhihu.com/p/27433116)
+由于 react 和 vue 的响应式实现原理不同，react 每次更新都需要渲染一颗更大的虚拟 DOM 树
+
+![fiber tree](https://s1.huangchengtuo.com/img/231123fiberTree.png)
+
+在 fiber 出现之前，react 的虚拟 DOM 树只有指向子节点的指针，所以中断渲染，暂存当前的 DOM 节点信息就会丢失父节点和兄弟节点的信息，无法完成遍历  
+通过 requestIdleCallback 来控制遍历的进度条，决定是否让出线程给其他操作

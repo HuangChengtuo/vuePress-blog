@@ -23,7 +23,13 @@ js 引擎是单线程的，只有一个 FILO 的执行栈。
 遇到异步操作放入 task 队列或者 microtask 队列，执行完执行栈后先执行 microtask 队列中微任务，再执行 task 队列中宏任务队列。  
 宏任务执行结束后会对页面重新渲染  
 微任务会在一个宏任务执行结束，下一个宏任务执行前执行
+
 ![事件循环](https://s1.huangchengtuo.com/img/0416eventLoop.png)
+
+宏任务是由宿主环境发起的，比如浏览器、Node等  
+微任务是由JS引擎发起的  
+Object.observe 观察对象变化  
+MutationObserver 观察 DOM 变化
 
 ## 垃圾回收
 
@@ -34,6 +40,15 @@ js 引擎是单线程的，只有一个 FILO 的执行栈。
 ### 引用计数 👎
 
 回收引用次数为零的对象。如果循环引用或者互相引用就无法被回收
+
+### V8 分代式垃圾回收
+
+![v8回收](https://s1.huangchengtuo.com/img/231123gc.png)
+
+新加入的对象都会存放到使用区，当使用区快被写满时，就需要执行一次垃圾清理操作  
+当开始进行垃圾回收时，新生代垃圾回收器会对使用区中的活动对象做标记，标记完成之后将使用区的活动对象复制进空闲区并进行排序，随后进入垃圾清理阶段，即将非活动对象占用的空间清理掉。最后进行角色互换，把原来的使用区变成空闲区，把原来的空闲区变成使用区  
+当一个对象经过多次复制后依然存活，它将会被认为是生命周期较长的对象，随后会被移动到老生代中，采用老生代的垃圾回收策略进行管理  
+老生代就是用标记清除
 
 ### 内存泄漏的情况
 
@@ -46,9 +61,9 @@ this 也有可能创建全局变量
 
 ```js
 function foo() {
-  this.variable = "potential accidental global";
+  this.variable = "potential accidental global"
 } // foo 调用自己，this 指向了 window，通过严格模式避免
-foo();
+foo()
 ```
 
 ## 跨域
@@ -129,6 +144,71 @@ stopPropagation 阻止冒泡
 target：点击的元素  
 currentTarget：触发的元素
 
-<!-- TODO -->
+## iframe 通信
 
-## 事件委托 + DocumentFragment 优化大量节点
+### url 传参
+
+痛过 query、hash 通知子页面，`window.onhashchange` 感知 hash 变化
+
+### postMessage
+
+window.open 也可以使用 postMessage
+
+```js
+window.postMessage("Hello world!", "http://127.0.0.1:5500/child.html")
+
+window.addEventListener("message", function (event) {
+  // 判断消息是否来自可信任的源
+  if (event.origin === "http://127.0.0.1:5500/child.html") {
+    console.log("message: " + event.data)
+  }
+})
+```
+
+### 直接获取 DOM
+
+```js
+document.getElementById().contentWindow.document
+
+window.parent.document
+```
+
+## Web Workers
+
+```js
+const myWorker = new Worker("worker.js")
+myWorker.postMessage("asd")
+myWorker.onmessage = (e) => {
+  console.log(e.data)
+}
+
+// worker.js
+onmessage = (e) => {
+  console.log(e.data)
+  postMessage("qwe")
+}
+```
+
+## 服务器发送事件 Server-Sent Event
+
+```js
+// http 长连接
+const evtSource = new EventSource("//api.example.com/ssedemo.php", { withCredentials: true })
+
+// onopen onerror
+evtSource.onmessage = (e) => {
+  console.log(e.data)
+}
+
+evtSource.close()
+```
+
+### 与 WebSocket 比较
+
+- 数据推送方向：SSE 是服务器向客户端的单向通信，服务器可以主动推送数据给客户端。而 WebSocket 是双向通信，允许服务器和客户端之间进行实时的双向数据交换。
+
+- 连接建立：SSE 使用基于 HTTP 的长连接，通过普通的 HTTP 请求和响应来建立连接，从而实现数据的实时推送。WebSocket 使用自定义的协议，通过建立 WebSocket 连接来实现双向通信。
+
+- 兼容性：由于 SSE 基于 HTTP 协议，它可以在大多数现代浏览器中使用，并且不需要额外的协议升级。WebSocket 在绝大多数现代浏览器中也得到了支持，但在某些特殊的网络环境下可能会遇到问题。
+
+<!-- TODO ## 事件委托 + DocumentFragment 优化大量节点 -->
