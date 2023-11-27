@@ -14,9 +14,9 @@
 
 - 使用 Nuxt、Next 进行服务端渲染、实现中间件
 - 熟悉 React、Vue 全家桶，手写实现过简单 Vue3
+- 了解小程序、Taro，熟练开发原生小程序，小程序 web-view 页面
 - 了解浏览器基本原理以及 ESNext、TypeScript 的新标准新特性
 - 使用 Node.js、Docker、nginx 进行线上部署，mock、代理接口
-- 了解小程序，熟练使用 mpvue、原生开发小程序，小程序 web-view 页面开发
 - 熟练使用 Git Hooks、ESLint、monorepo 进行团队开发合作
 
 ## 工作经历
@@ -26,11 +26,10 @@
 
 emr、clickhouse 产品技术 owner
 
-- 负责前端项目从头搭建,设计产品权限点、路由结构、请求规范
-- 优化迭代工作流，配置 ESLint 规范代码，提高交付质量、减少 bug
-- 封装请求、组件、工具，完善类型配置，配置部署环境 Dockerfile、nginx
-- 使用后端密钥封装 CA 证书文件
-
+- 负责前端项目从头搭建，设计产品权限点、路由结构、业务流程
+- 配置 Git Hooks 规范 Git 流程，配置 ESLint 规范代码，提高交付质量、减少 bug
+- 封装请求、状态管理工具类，完善 TypeScript 泛型配置
+- 使用后端数据封装 CA 证书文件、csv 表格文件
 
 大数据开发治理平台版本迭代开发
 
