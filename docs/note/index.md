@@ -121,6 +121,7 @@ diff 算法会逐层进行比较，但只会同层级之间比较，为了性能
 最先遍历完后将剩余节点排到最后或移除
 
 ## http 状态码
+
 200 OK  
 201 Created  
 301 Moved Permanently  
@@ -132,8 +133,20 @@ diff 算法会逐层进行比较，但只会同层级之间比较，为了性能
 404 Not Found  
 500 Internal Server Error  
 502 Bad Gateway  
-504 Gateway Timeout  
+504 Gateway Timeout
 
 ## 网络模型
 
-![diff](https://s1.huangchengtuo.com/img/231123osi.gif)  
+![diff](https://s1.huangchengtuo.com/img/231123osi.gif)
+
+## Git Hooks
+
+[前端 Git-Hooks 工程化实践](https://juejin.cn/post/7114170606609760286)
+
+### 原生 Git Hooks
+
+`.git/hooks` 文件夹中有实例文件，去掉 `.sample` 后缀即可生效，但是 `.git` 文件夹不会被 git 追踪，没法保证所有人的仓库都有
+
+### Husky
+
+安装 Husky 会生成 .husky 文件夹，编写 shell 文件通过 node 执行 js 文件，遇到问题 `process.exit(1)`

@@ -17,7 +17,7 @@
 - 了解浏览器基本原理以及 ESNext、TypeScript 的新标准新特性
 - 使用 Node.js、Docker、nginx 进行线上部署，mock、代理接口
 - 了解小程序，熟练使用 mpvue、原生开发小程序，小程序 web-view 页面开发
-- 熟练使用 Git、ESLint、monorepo 进行团队开发合作
+- 熟练使用 Git Hooks、ESLint、monorepo 进行团队开发合作
 
 ## 工作经历
 
