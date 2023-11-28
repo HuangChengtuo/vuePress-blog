@@ -10,6 +10,31 @@
 
 `object`、`Array`、`Function`...
 
+### 判断类型
+
+**typeof**
+
+只输出 number，boolean，string，function，object，undefined  
+NaN 也输出 number  
+引用类型（数组、正则）只输出 object
+
+**instanceof**
+
+用于检测构造函数的 `prototype` 属性是否出现在某个实例对象的原型链上
+
+**call**
+
+```js
+Object.prototype.toString.call()
+console.log(toString.call(123)) //[object Number]
+console.log(toString.call("123")) //[object String]
+console.log(toString.call(undefined)) //[object Undefined]
+console.log(toString.call(true)) //[object Boolean]
+console.log(toString.call({})) //[object Object]
+console.log(toString.call([])) //[object Array]
+console.log(toString.call(function () {})) //[object Function]
+```
+
 ## 原型链
 
 ![原型链](https://s1.huangchengtuo.com/img/0420prototype.png)

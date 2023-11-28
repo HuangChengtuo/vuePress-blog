@@ -162,7 +162,7 @@ class Greeting extends Component {}
 console.log(Greeting.prototype.isReactComponent)
 ```
 
-## fiber
+## Fiber
 
 ![tree](https://s1.huangchengtuo.com/img/231123tree.png)
 
@@ -172,3 +172,24 @@ console.log(Greeting.prototype.isReactComponent)
 
 在 fiber 出现之前，react 的虚拟 DOM 树只有指向子节点的指针，所以中断渲染，暂存当前的 DOM 节点信息就会丢失父节点和兄弟节点的信息，无法完成遍历  
 通过 requestIdleCallback 来控制遍历的进度条，决定是否让出线程给其他操作
+
+React 中最多会存在两颗 Fiber树
+
+- currentFiber：页面中显示的内容
+- workInProgressFiber：内存中正在重新构建的 Fiber树
+
+## Hooks 链表
+
+### hooks mount 阶段
+
+当函数式组件初始化时，会调用 `renderWithHooks` 函数，初始化走 `HooksDispatcherOnMount`，后续更新走 `HooksDispatcherOnUpdate`  
+
+初始化时，会调用 `mountWorkInProgressHook ` 创建 hook 链表节点，挂载到 fiber 节点的 `memoizedState` 上（Fiber 上的 `memoizedState` 指向 hooks 链表，hook 身上的 `memoizedState` 存储他们自己的状态）
+
+### hooks update 阶段
+
+调用 `updateWorkInProgressHook` 克隆 hook 节点，进行新旧比较
+
+第一部分：由 `nextCurrentHook` 中间变量 记录旧的 hooks 链表  
+第二部分：由 `nextWorkInProgressHook` 中间变量 克隆旧的 hook 节点形成新的 hooks 链表  
+第三部分：currentHook 指向旧 hooks链表；`workInProgressHook` 指向新的 hooks 链表，返回 `workInProgressHook`

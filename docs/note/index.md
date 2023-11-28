@@ -21,6 +21,10 @@ const quickSort = (arr) => {
 
 选择一个节点，比它小的放左边，比它大的放右边，不断重复
 
+### 冒泡排序
+
+![冒泡排序](https://s1.huangchengtuo.com/img/231128popSort.gif)
+
 ## 防抖
 
 防止一定时间内重复点击
@@ -138,6 +142,11 @@ diff 算法会逐层进行比较，但只会同层级之间比较，为了性能
 ## 网络模型
 
 ![diff](https://s1.huangchengtuo.com/img/231123osi.gif)
+
+应用层：HTTP、SSH、FTP  
+传输层：TCP、UDP  
+网络层：IP、ARP
+物理层：以太网、蓝牙、wifi
 
 ## Git Hooks
 
