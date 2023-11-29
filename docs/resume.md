@@ -50,7 +50,7 @@ emr、clickhouse 产品技术 owner
 
 - 对接支付宝、微信的支付 sdk
 - 使用双向循环链表实现首页可控轮播图
-- 通过小程序 web-view 混合展示内容，打造 hybrid 小程序
+- 通过小程序和 web-view 混合展示内容，打造 hybrid 小程序
 
 <QRCode />
 

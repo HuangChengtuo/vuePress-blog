@@ -19,6 +19,8 @@ DOM 树渲染到 script 标签后就会停止，js 引擎开始工作
 
 ## 事件循环
 
+### 浏览器环境
+
 js 引擎是单线程的，只有一个 FILO 的执行栈。  
 遇到异步操作放入 task 队列或者 microtask 队列，执行完执行栈后先执行 microtask 队列中微任务，再执行 task 队列中宏任务队列。  
 宏任务执行结束后会对页面重新渲染  
@@ -30,6 +32,20 @@ js 引擎是单线程的，只有一个 FILO 的执行栈。
 微任务是由JS引擎发起的  
 Object.observe 观察对象变化  
 MutationObserver 观察 DOM 变化
+
+### node 环境
+
+![事件循环](https://s1.huangchengtuo.com/img/231129eventLoop.png)
+
+- timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调
+- I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调
+- idle, prepare 阶段：仅node内部使用
+- poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里
+- check 阶段：执行 setImmediate() 的回调
+- close callbacks 阶段：执行 socket 的 close 事件回调
+
+微任务会在事件循环的各个阶段之间执行   
+process.nextTick 独立于 Event Loop 之外的，它有一个自己的队列，当每个阶段完成后，如果存在 nextTick 队列，就会清空队列中的所有回调函数，并且优先于其他 microtask 执行
 
 ## 垃圾回收
 
@@ -211,4 +227,4 @@ evtSource.close()
 
 - 兼容性：由于 SSE 基于 HTTP 协议，它可以在大多数现代浏览器中使用，并且不需要额外的协议升级。WebSocket 在绝大多数现代浏览器中也得到了支持，但在某些特殊的网络环境下可能会遇到问题。
 
-<!-- TODO ## 事件委托 + DocumentFragment 优化大量节点 -->
+## 事件委托 + DocumentFragment 优化大量节点

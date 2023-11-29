@@ -34,112 +34,6 @@ type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | und
 
 `JSX.Element`就是通过继承`React.ReactNode`实现的，没有任何区别
 
-## AntD 的 Event 的 ts 类型
-
-TypeScript 一大作用就是为了提供精准的代码提示
-
-当方法内联于 antd 元素中，Event 能够得到良好的代码提示
-
-比如用到最多的`e.target.value`这个值在 ts 的提示下最少 5 次敲击内输入完整的代码  
-![内联方法](https://s1.huangchengtuo.com/img/210615inline.gif)
-
-但当通过引用来传入方法，不进行正确的类型标记，形参就会隐式的变为 any 类型，失去原有的 ts 提示
-
-```tsx
-// e implicitly has any type
-const onChange = (e) => {
-  console.log(e?.target?.value)
-}
-// ...
-;<Input onChange={onChange} />
-```
-
-这时就需要手动对方法的形参的类型进行标注
-
-- `Input.onChange(e: React.ChangeEvent<HTMLInputElement>)`
-- `Radio.Group.onChange(e: antd.RadioChangeEvent)`
-- `Checkbox.onChange(e: antd.CheckboxChangeEvent)`
-- `Button.onClick(e: React.MouseEvent)`
-- `Select.onChange(value: string, option:Option)`
-
-## React Router 的 Hooks 与 HOC 用法
-
-当组件被传入`Route.component`时，路由相关信息会直接注入 props 中  
-![router hook](https://s1.huangchengtuo.com/img/210622router-props.png)  
-当组件没有直接被 Route 包裹，又需要调用路由的相关方法或获取路由信息时，就需要另作处理
-
-### Hooks
-
-React Router 从 v5.1.0 开始，新增了对 Hooks 的支持，并陆续添加了四个钩子函数
-
-- `useHistory`
-- `useLocation`
-- `useParams`
-- `useRouteMatch`
-
-```jsx
-import { useHistory, useLocation, useParams } from "react-router-dom"
-
-export default function Playground() {
-  const router = useHistory()
-  // useHistory().location 和 useLocation() 数据结构都是一致的
-  const route = useLocation() || router.location
-  // 获取 url 中的参数 /playground/:id
-  const params = useParams()
-
-  function jump() {
-    router.push("...")
-  }
-
-  return <>...</>
-}
-```
-
-useHistory 提供的方法，基本与 class 一致  
-![router hook](https://s1.huangchengtuo.com/img/210622router-hook.png)
-
-[Hooks 文档地址](https://reactrouter.com/web/api/Hooks)
-
-### HOC
-
-使用`withRouter`对组件进行包裹，生成一个高阶组件，在原组件的 props 里添加相应的路由属性与方法
-
-```tsx
-// index.d.ts
-export interface RouteComponentProps<
-  Params extends { [K in keyof Params]?: string } = {},
-  C extends StaticContext = StaticContext,
-  S = H.LocationState
-> {
-  history: H.History<S>
-  location: H.Location<S>
-  match: match<Params>
-  staticContext?: C
-}
-
-// playground.tsx
-import { withRouter, RouteComponentProps } from "react-router-dom"
-
-interface Props extends RouteComponentProps {
-  text: string
-  // ...
-}
-
-class BlockA extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props)
-    console.log(props)
-  }
-
-  render() {
-    return <div>block a</div>
-  }
-}
-
-const WithRouterBlockA = withRouter(BlockA)
-export default WithRouterBlockA
-```
-
 ## 区分 class 组件和 function 组件
 
 [How Does React Tell a Class from a Function?](https://overreacted.io/how-does-react-tell-a-class-from-a-function/)
@@ -162,6 +56,62 @@ class Greeting extends Component {}
 console.log(Greeting.prototype.isReactComponent)
 ```
 
+## ref
+
+### class 组件
+
+```jsx
+import React from "react"
+
+export default class Test extends React.Component {
+  ref = React.createRef()
+
+  componentDidUpdate() {
+    this.ref.current.focus()
+  }
+
+  render() {
+    return <input ref={this.ref} />
+  }
+}
+```
+
+### 函数组件
+
+```jsx
+import { useRef } from "react"
+
+export default function Test() {
+  const ref = useRef()
+
+  useEffect(() => {
+    this.ref.current.focus()
+  }, [])
+
+  return <input ref={this.ref} />
+}
+```
+
+函数组件不会暴露出自己的实例，需要使用 `forwardRef ` 来包装组件
+
+```jsx
+import { forwardRef, useImperativeHandle } from "react"
+
+function Child(props, ref) {
+  useImperativeHandle(ref, () => {
+    return {
+      onXXX,
+      onResetXXX,
+      XXX,
+    }
+  })
+
+  return <>...</>
+}
+
+export default forwardRef(Child)
+```
+
 ## Fiber
 
 ![tree](https://s1.huangchengtuo.com/img/231123tree.png)
@@ -173,16 +123,16 @@ console.log(Greeting.prototype.isReactComponent)
 在 fiber 出现之前，react 的虚拟 DOM 树只有指向子节点的指针，所以中断渲染，暂存当前的 DOM 节点信息就会丢失父节点和兄弟节点的信息，无法完成遍历  
 通过 requestIdleCallback 来控制遍历的进度条，决定是否让出线程给其他操作
 
-React 中最多会存在两颗 Fiber树
+React 中最多会存在两颗 Fiber 树
 
 - currentFiber：页面中显示的内容
-- workInProgressFiber：内存中正在重新构建的 Fiber树
+- workInProgressFiber：内存中正在重新构建的 Fiber 树
 
 ## Hooks 链表
 
 ### hooks mount 阶段
 
-当函数式组件初始化时，会调用 `renderWithHooks` 函数，初始化走 `HooksDispatcherOnMount`，后续更新走 `HooksDispatcherOnUpdate`  
+当函数式组件初始化时，会调用 `renderWithHooks` 函数，初始化走 `HooksDispatcherOnMount`，后续更新走 `HooksDispatcherOnUpdate`
 
 初始化时，会调用 `mountWorkInProgressHook ` 创建 hook 链表节点，挂载到 fiber 节点的 `memoizedState` 上（Fiber 上的 `memoizedState` 指向 hooks 链表，hook 身上的 `memoizedState` 存储他们自己的状态）
 
@@ -192,4 +142,4 @@ React 中最多会存在两颗 Fiber树
 
 第一部分：由 `nextCurrentHook` 中间变量 记录旧的 hooks 链表  
 第二部分：由 `nextWorkInProgressHook` 中间变量 克隆旧的 hook 节点形成新的 hooks 链表  
-第三部分：currentHook 指向旧 hooks链表；`workInProgressHook` 指向新的 hooks 链表，返回 `workInProgressHook`
+第三部分：currentHook 指向旧 hooks 链表；`workInProgressHook` 指向新的 hooks 链表，返回 `workInProgressHook`

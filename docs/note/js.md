@@ -46,6 +46,8 @@ console.log(toString.call(function () {})) //[object Function]
 - 函数的 prototype 是一个对象
 - 函数的 prototype 指向了一个对象，而这个对象正是调用构造函数时创建的实例的原型
 
+![原型链](https://s1.huangchengtuo.com/img/231129proto.png)
+
 ## 继承
 
 prototype 的继承就是 js 的糟粕，能用 class 就用 class

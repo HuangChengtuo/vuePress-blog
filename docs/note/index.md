@@ -159,3 +159,5 @@ diff 算法会逐层进行比较，但只会同层级之间比较，为了性能
 ### Husky
 
 安装 Husky 会生成 .husky 文件夹，编写 shell 文件通过 node 执行 js 文件，遇到问题 `process.exit(1)`
+
+<!-- 单测 -->
