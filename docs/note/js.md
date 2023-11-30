@@ -179,14 +179,6 @@ num = 1
 
 let 和 const 能生成暂时性死区，提前使用会抛出错误
 
-## 模块化 ESModule 和 CommonJS 比较
-
-动态导入：ES module 支持动态导入，也就是在代码运行时根据需要导入模块。而 CommonJS 不支持动态导入  
-作用域：ES module 的模块作用域是静态的，在模块中定义的变量和函数不会污染全局作用域。而 CommonJS 的模块作用域是动态的，模块中定义的变量和函数会被添加到全局作用域中  
-异步加载：ES module 可以异步加载模块，以提高性能和减少启动时间。而 CommonJS 只能同步加载模块，浏览器可以通过 webpack 打包来实现 CommonJS  
-兼容性：CommonJS 好  
-导入数量：CommonJS 只支持一个
-
 ## 性能指标
 
 [来来来，前端性能监控，带你拿到正确的性能指标](https://juejin.cn/post/7223280402475089978)

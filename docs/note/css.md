@@ -14,7 +14,7 @@
 ## 选择器优先级
 
 !important 内联样式  
-选中器中给定的ID属性值  
+选中器中给定的 ID 属性值  
 选择器中给定的类属性值，属性选择或伪类  
 选择器中给定的元素选择器和伪元素  
 结合符和通配符选择器对优先级没有任何贡献
@@ -25,12 +25,12 @@
 
 ### BFC 创建方法
 
-* 根元素或其它包含它的元素；
-* 浮动 (元素的float不为none)；
-* 行内块inline-blocks(元素的 display: inline-block)；
-* 表格单元格(元素的display: table-cell，HTML表格单元格默认属性)；
-* overflow的值不为visible的元素；
-* 弹性盒 flex boxes (元素的display: flex或inline-flex)；
+- 根元素或其它包含它的元素；
+- 浮动 (元素的 float 不为 none)；
+- 行内块 inline-blocks(元素的 display: inline-block)；
+- 表格单元格(元素的 display: table-cell，HTML 表格单元格默认属性)；
+- overflow 的值不为 visible 的元素；
+- 弹性盒 flex boxes (元素的 display: flex 或 inline-flex)；
 
 ### BFC 作用
 
@@ -44,19 +44,43 @@
 
 ```css
 .center {
-    text-align: center;
-    line-height: 100%;
+  text-align: center;
+  line-height: 100%;
 
-    margin: 0 auto;
-    vertical-align: middle;
+  margin: 0 auto;
+  vertical-align: middle;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    /* posistion... */
+  /* posistion... */
+}
+```
+
+## 变量
+
+### css
+
+```css
+:root {
+  --light: #000000;
+  --dark: #ffffff;
 }
 
+.theme {
+  color: var(--light);
+}
+```
+
+### sass
+
+```scss
+$light: #000000;
+
+.theme {
+  color: $light;
+}
 ```
 
 ## sass mixin
@@ -84,18 +108,18 @@
 
 `display:none`
 
-* 会改变布局，回流
-* 子元素无法显示
-* 绑定事件无法触发
+- 会改变布局，回流
+- 子元素无法显示
+- 绑定事件无法触发
 
 `opacity:0`
 
-* 子元素会继承，无法显示
-* 绑定事件可以触发
+- 子元素会继承，无法显示
+- 绑定事件可以触发
 
 `visibility:hidden`
 
-* 子元素会继承，可重新显示
-* 绑定事件无法触发
+- 子元素会继承，可重新显示
+- 绑定事件无法触发
 
 `transform:scale(0,0)`
