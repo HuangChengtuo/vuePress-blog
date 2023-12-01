@@ -1,6 +1,6 @@
 # 模块化
 
-## 模块化 ESModule 和 CommonJS 比较
+## ESModule 和 CommonJS 比较
 
 动态导入：ES module 支持动态导入，也就是在代码运行时根据需要导入模块。而 CommonJS 不支持动态导入  
 作用域：ES module 的模块作用域是静态的，在模块中定义的变量和函数不会污染全局作用域。而 CommonJS 的模块作用域是动态的，模块中定义的变量和函数会被添加到全局作用域中  
