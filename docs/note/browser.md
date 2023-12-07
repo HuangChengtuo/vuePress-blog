@@ -28,8 +28,8 @@ js 引擎是单线程的，只有一个 FILO 的执行栈。
 
 ![事件循环](https://s1.huangchengtuo.com/img/0416eventLoop.png)
 
-宏任务是由宿主环境发起的，比如浏览器、Node等  
-微任务是由JS引擎发起的  
+宏任务是由宿主环境发起的，比如浏览器、Node 等  
+微任务是由 JS 引擎发起的  
 Object.observe 观察对象变化  
 MutationObserver 观察 DOM 变化
 
@@ -37,14 +37,14 @@ MutationObserver 观察 DOM 变化
 
 ![事件循环](https://s1.huangchengtuo.com/img/231129eventLoop.png)
 
-- timers 阶段：这个阶段执行timer（setTimeout、setInterval）的回调
+- timers 阶段：这个阶段执行 timer（setTimeout、setInterval）的回调
 - I/O callbacks 阶段：处理一些上一轮循环中的少数未执行的 I/O 回调
-- idle, prepare 阶段：仅node内部使用
-- poll 阶段：获取新的I/O事件, 适当的条件下node将阻塞在这里
+- idle, prepare 阶段：仅 node 内部使用
+- poll 阶段：获取新的 I/O 事件, 适当的条件下 node 将阻塞在这里
 - check 阶段：执行 setImmediate() 的回调
 - close callbacks 阶段：执行 socket 的 close 事件回调
 
-微任务会在事件循环的各个阶段之间执行   
+微任务会在事件循环的各个阶段之间执行  
 process.nextTick 独立于 Event Loop 之外的，它有一个自己的队列，当每个阶段完成后，如果存在 nextTick 队列，就会清空队列中的所有回调函数，并且优先于其他 microtask 执行
 
 ## 垃圾回收
@@ -183,6 +183,8 @@ window.addEventListener("message", function (event) {
 
 ### 直接获取 DOM
 
+会受到同源策略限制
+
 ```js
 document.getElementById().contentWindow.document
 
@@ -197,13 +199,20 @@ myWorker.postMessage("asd")
 myWorker.onmessage = (e) => {
   console.log(e.data)
 }
+myWorker.terminate()
 
 // worker.js
 onmessage = (e) => {
   console.log(e.data)
   postMessage("qwe")
 }
+this.close()
 ```
+
+### 与主线程的区别
+
+Web Workers 和主线程之间的一个关键区别是 Web Workers 没有访问 DOM 或 UI 的权限。这意味着它不能直接操作页面上的 HTML 元素或与用户交互。实际上，Web Workers 被设计用于执行不需要直接访问 UI 的任务，例如数据处理、图像操作或计算  
+另一个区别是，Web Workers 被设计为在与主线程分离的沙箱环境中运行，这意味着它们对系统资源的访问受到限制，并且不能访问某些 API，如 localStorage 或 sessionStorage API。不过，它可以通过消息传递系统与主线程进行通信，从而允许两个线程之间交换数据
 
 ## 服务器发送事件 Server-Sent Event
 

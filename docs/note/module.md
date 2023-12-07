@@ -10,11 +10,13 @@
 
 [Webpack 中 Loader 与 Plugin](https://blog.csdn.net/liu19721018/article/details/125763634)
 
-## webpack plugin 执行时机
+## webpack
+
+### plugin 执行时机
 
 plugin 是通过扩展 webpack 功能，加入自定义的构建行为，使得 webpack 可以执行更广泛的任务。webpack 在编译代码过程中，会触发一系列 Tapable 钩子事件，插件所做的，就是找到相应的钩子，往上面挂上自己的任务，也就是注册事件，这样，当 webpack 构建的时候，插件注册的事件就会随着钩子的触发而执行了。
 
-## webpack loader 顺序
+## loader 顺序
 
 ```js
 module.exports = {
@@ -31,3 +33,13 @@ module.exports = {
 
 顺序为从后往前 `less-loader` -> `css-loader` -> `style-loader`  
 可以通过配置每个 loader 的 `enforce` 属性来改变顺序 pre > normal > inline > post
+
+![loader](https://s1.huangchengtuo.com/img/231207loader.jpg)
+
+正常情况 normal 和 pitching 阶段顺序相反
+
+![loader](https://s1.huangchengtuo.com/img/231207pitching.png)
+
+在 Pitching 阶段，如果当前 Loader.pitch 有返回值，就直接结束当前 loader 的 Pitching 阶段，并直接跳到当前 Loader 执行 pitching 阶段时的 前一个 loader 的 normal 阶段，然后继续执行
+
+[学习webpack loader，这一篇文章足够了。从原因、原理、用法、自定义loader等方面解析，讲的明明白白！](https://juejin.cn/post/7283768998777061435?searchId=202312072047534726FA4385062C2826FF)

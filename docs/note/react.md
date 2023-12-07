@@ -143,3 +143,5 @@ React 中最多会存在两颗 Fiber 树
 第一部分：由 `nextCurrentHook` 中间变量 记录旧的 hooks 链表  
 第二部分：由 `nextWorkInProgressHook` 中间变量 克隆旧的 hook 节点形成新的 hooks 链表  
 第三部分：currentHook 指向旧 hooks 链表；`workInProgressHook` 指向新的 hooks 链表，返回 `workInProgressHook`
+
+## [彻底搞懂 React 18 并发机制的原理](https://juejin.cn/post/7171231346361106440)
